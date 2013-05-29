@@ -3,7 +3,8 @@ package mauroponce.pfi.ui;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import mauroponce.pfi.utils.FileUtils;
+import mauroponce.pfi.service.DetectionService;
+import mauroponce.pfi.service.RecognitionService;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -17,8 +18,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,23 +37,34 @@ public class MainActivity extends Activity {
         
         btnAccept.setOnClickListener(new OnClickListener() {
 
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				//Intent intent = new Intent(MainActivity.this, ResultadoActivity.class);
+//				//String facesData = getFacesData(editTextUsr.getText().toString());//mmiralles
+//				String facesData = FileUtils.readRawResource(MainActivity.this, R.raw.facedata);
+//				String fileName = "facesData.xml";
+//				FileUtils.write(fileName, facesData, MainActivity.this);
+//				
+//				//String read = FileUtils.read(fileName, MainActivity.this);
+//				//Open from FaceRecognizer
+//				
+//				//start camera
+//				Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+//				//intent.putExtra("lus", lus);
+//		        startActivity(intent);
+//			}   
+			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				//Intent intent = new Intent(MainActivity.this, ResultadoActivity.class);
-				//String facesData = getFacesData(editTextUsr.getText().toString());//mmiralles
-				String facesData = FileUtils.readRawResource(MainActivity.this, R.raw.facedata);
-				String fileName = "facesData.xml";
-				FileUtils.write(fileName, facesData, MainActivity.this);
-				
-				//String read = FileUtils.read(fileName, MainActivity.this);
-				//Open from FaceRecognizer
-				
-				//start camera
-				Intent intent = new Intent(MainActivity.this, CameraActivity.class);
-				//intent.putExtra("lus", lus);
-		        startActivity(intent);
-			}        	
+				try {
+					DetectionService.detectFaces(Environment.getExternalStorageDirectory().getAbsolutePath()+"/moralalbino.jpg", "nueva");
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+		        new RecognitionService().recognize(Environment.getExternalStorageDirectory().getAbsolutePath()+"/nuevaResized0.jpg", 3);
+			}
         });
         //post();
                

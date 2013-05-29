@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import mauroponce.pfi.domain.IndexDistance;
+import android.os.Environment;
 
 import com.googlecode.javacpp.FloatPointer;
 import com.googlecode.javacpp.Pointer;
@@ -29,7 +30,7 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 public class RecognitionService {
 	
-	final String DATA_PATH = ""; // TODO: poner el path al archivo en android
+	final String DATA_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()+"/facedata.xml"; // TODO: poner el path al archivo en android
 	IplImage[] trainingFaceImgArr;
 	private int nTrainFaces = 0;
 	CvMat projectedTrainFaceMat;
