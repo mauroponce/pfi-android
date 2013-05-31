@@ -11,6 +11,7 @@ import static com.googlecode.javacv.cpp.opencv_core.cvReleaseFileStorage;
 import static com.googlecode.javacv.cpp.opencv_highgui.CV_LOAD_IMAGE_GRAYSCALE;
 import static com.googlecode.javacv.cpp.opencv_highgui.cvLoadImage;
 import static com.googlecode.javacv.cpp.opencv_legacy.cvEigenDecomposite;
+import static com.googlecode.javacv.cpp.opencv_imgproc.cvEqualizeHist;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -189,6 +190,10 @@ public class RecognitionService {
 					+ "\nwanted " + width + "x" + height + ", but found "
 					+ faceImage.width() + "x" + faceImage.height());
 		}
+		
+		// Give the image a standard brightness and contrast.
+		cvEqualizeHist(faceImage, faceImage);
+		
 		faceImgArr[iFace] = faceImage;
 		iFace++;		
 		return faceImgArr;

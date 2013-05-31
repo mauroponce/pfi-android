@@ -53,8 +53,9 @@ public class DetectionService {
 
 		// We iterate over the discovered faces and draw yellow rectangles
 		// around them.
-		for (int i = 0; i < faces.total(); i++) {
-			CvRect r = new CvRect(cvGetSeqElem(faces, i));
+		
+		if (faces.total()>0){
+			CvRect r = new CvRect(cvGetSeqElem(faces, 1));
 			IplImage imageCropped = ImageUtils.cropImage(originalImage, r);
 			
 //			cvRectangle(originalImage, cvPoint(r.x(), r.y()),
@@ -62,15 +63,16 @@ public class DetectionService {
 //					CvScalar.YELLOW, 1, CV_AA, 0);
 			
 			// Save cropped image to a new file.
-			cvSaveImage(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+fileOutputName+"Cropped"+i+".jpg", imageCropped);
-			IplImage imageResized = ImageUtils.resizeImage(originalImage,103,106); 
+//			cvSaveImage(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+fileOutputName+"Cropped"+i+".jpg", imageCropped);
+//			IplImage imageResized = ImageUtils.resizeImage(originalImage,103,106); 
+			IplImage imageResized = ImageUtils.resizeImage(imageCropped,103,106);
 			// Save resized image to a new file.
-			cvSaveImage(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+fileOutputName+"Resized"+i+".jpg", imageResized);
+			cvSaveImage(fileInputPath, imageResized);
 		}
 //
 //		// Save the image to a new file.
 //		cvSaveImage("C:\\Users\\smoral\\Desktop\\tmp\\"+fileOutputName+".jpg", originalImage);
-		System.out.println("Printe image "+fileOutputName);
+		System.out.println("Printe image "+fileInputPath);
 	}
 
 }

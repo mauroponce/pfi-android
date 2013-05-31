@@ -1,6 +1,7 @@
 package mauroponce.pfi.ui;
 import java.util.Date;
 
+import mauroponce.pfi.service.DetectionService;
 import mauroponce.pfi.service.RecognitionService;
 import mauroponce.pfi.utils.FileUtils;
 import android.app.Activity;
@@ -31,6 +32,7 @@ public class CameraActivity extends Activity {
         startActivityForResult(intentPicture,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         imagePath = FileUtils.getRealPathFromURI(mCapturedImageURI, CameraActivity.this);
     }
+
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -45,8 +47,18 @@ public class CameraActivity extends Activity {
                 //if(lus == null){//no se encontro un proximo con cierta certidumbre
                 	//mostrar dialogo para tomar nueva fotografia
                 //}else{
-                //Despues de hacer el reconocimiento, borro la imagen
-                FileUtils.deleteFileInPath(imagePath);//NO ANDA!
+//                //Despues de hacer el reconocimiento, borro la imagen
+//                FileUtils.deleteFileInPath(imagePath);//NO ANDA!
+                
+
+				try {
+					DetectionService.detectFaces(imagePath, "nueva");
+			        doRecognition(3);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+                
 				Intent intent = new Intent(CameraActivity.this, ListViewImagesActivity.class);
 				//intent.putExtra("lus", lus);
 		        startActivity(intent);
