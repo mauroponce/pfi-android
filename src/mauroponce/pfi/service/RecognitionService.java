@@ -45,18 +45,21 @@ public class RecognitionService {
 	IplImage[] testFaceImgArr;
 
 	/**Finds the k most similar faces.*/
-	public void recognize(final String testImagePath, final int k) {
+	public ArrayList<Integer> recognize(final String testImagePath, final int k) {
 		int i = 0;
 		int nTestFaces = 0;
 		CvMat trainPersonNumMat;
 		float[] projectedTestFace;
 		float confidence = 0.0f;
-
+		ArrayList<Integer> nearestsLus = null;
+		
+		
+		
 		testFaceImgArr = loadFaceImgArrayFromImagePath(testImagePath);
 		nTestFaces = testFaceImgArr.length;
 		trainPersonNumMat = loadTrainingData();
 		if (trainPersonNumMat == null) {
-			return;
+			return nearestsLus;
 		}
 		projectedTestFace = new float[nEigens];
 
@@ -80,13 +83,14 @@ public class RecognitionService {
 			confidence = pConfidence.get();
 			nearest = trainPersonNumMat.data_i().get(iNearest);
 			/*retornar un arreglo de legajos mas cercanos*/
-			int [] nearestsLus = new int [knn.length];
+			nearestsLus = new ArrayList<Integer>();
 			for(int j = 0 ; j < knn.length; j++){
-				nearestsLus[j] = trainPersonNumMat.data_i().get(knn[j]);
+				nearestsLus.add(trainPersonNumMat.data_i().get(knn[j]));
 			}
 			System.out.println("Mas cercano: " + nearest);
-			//return nearestsLus;
 		}
+		
+		return nearestsLus; 
 	}
 
 	private CvMat loadTrainingData() {

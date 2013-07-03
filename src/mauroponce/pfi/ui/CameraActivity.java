@@ -1,4 +1,5 @@
 package mauroponce.pfi.ui;
+import java.util.ArrayList;
 import java.util.Date;
 
 import mauroponce.pfi.service.DetectionService;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 public class CameraActivity extends Activity {
 
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+	public final static String STUDENTS_LUS_ARRAY = "students_lus_array";
 	private String imagePath;
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,7 @@ public class CameraActivity extends Activity {
         intentPicture.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURI);
         
         startActivityForResult(intentPicture,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        imagePath = FileUtils.getRealPathFromURI(mCapturedImageURI, CameraActivity.this);
+        imagePath = FileUtils.getRealPathFromURI(mCapturedImageURI, CameraActivity.this)+"/pfi";
     }
 
 	@Override
@@ -50,18 +52,24 @@ public class CameraActivity extends Activity {
 //                //Despues de hacer el reconocimiento, borro la imagen
 //                FileUtils.deleteFileInPath(imagePath);//NO ANDA!
                 
-
+                ArrayList<Integer> nearestStudents = null;
 				try {
 					DetectionService.detectFaces(imagePath, "nueva");
-			        doRecognition(3);
+					nearestStudents = doRecognition(3);
+			        
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
                 
-				Intent intent = new Intent(CameraActivity.this, ListViewImagesActivity.class);
-				//intent.putExtra("lus", lus);
-		        startActivity(intent);
+				if (!nearestStudents.isEmpty()){
+					Intent intent = new Intent(CameraActivity.this, ListViewImagesActivity.class);
+					//intent.putExtra("lus", lus);
+				    intent.putIntegerArrayListExtra(STUDENTS_LUS_ARRAY, nearestStudents);
+			        startActivity(intent);
+				}else{
+					//TODO hacer que vuelva a pedir la foto
+				}
 
             } else if (resultCode == RESULT_CANCELED) {
 
@@ -73,14 +81,15 @@ public class CameraActivity extends Activity {
 
         }
     }	
+
 	/**Returns the knn's LUs*/
-	private int [] doRecognition(int knn){
+	private ArrayList<Integer> doRecognition(int knn){
 		RecognitionService recognitionService = new RecognitionService();
 		
 		//Hacer q devuelva la lista de LUs
-		recognitionService.recognize(imagePath, knn);
-		
-		return null;
+		return recognitionService.recognize(imagePath, knn);
 	}
+    
+   
 	
 }

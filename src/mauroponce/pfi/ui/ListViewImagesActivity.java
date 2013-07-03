@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mauroponce.pfi.domain.Student;
+import mauroponce.pfi.service.RemoteService;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,15 +16,12 @@ import android.widget.Toast;
 
 public class ListViewImagesActivity extends Activity {
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
-		
-		/*Obtener la lista de Students a partir del xml, pasando los lu del Intent*/
-		Bundle extras = getIntent().getExtras(); 
-		
+    public void onCreate(Bundle savedInstanceState) {		
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_view);
         
-        List<Student> students = getStudentsFromWebService();
+        
+        List<Student> students = getStudents();
         
         final ListView lv1 = (ListView) findViewById(R.id.listV_main);
         lv1.setAdapter(new ItemListBaseAdapter(this, students));
@@ -36,6 +35,14 @@ public class ListViewImagesActivity extends Activity {
         	}  
         });
     }
+
+	private List<Student> getStudents() { 	
+		Intent intent = getIntent();
+		int[] studentLus = intent.getIntArrayExtra(CameraActivity.STUDENTS_LUS_ARRAY);		
+        
+        RemoteService remoteService= new RemoteService();
+    	return remoteService.getStudents(studentLus);
+	}
     
 	private List<Student> getStudentsFromWebService(){
 		List<Student> results = new ArrayList<Student>();

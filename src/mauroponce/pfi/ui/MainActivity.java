@@ -3,16 +3,14 @@ package mauroponce.pfi.ui;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import mauroponce.pfi.service.RemoteService;
 import mauroponce.pfi.utils.FileUtils;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,6 +29,8 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        //TODO: When the appliction starts we need to save in the storage the haar classifier to can get it for the detection         
+        
         editTextUsr = (EditText)findViewById(R.id.editTextUsr);
         btnAccept = (Button)findViewById(R.id.buttonAccept);
         
@@ -94,27 +94,7 @@ public class MainActivity extends Activity {
     }
     
     private String getFacesData(String usr){    	
-    	//String date = new DateTime().toString(DateTimeFormat.forPattern("yyyy-MM-dd-HH:mm"));
-    	String date = "2012-10-15-09:30";
-    	HttpClient httpClient = new DefaultHttpClient();
-    	 
-    	HttpGet get =
-    	    new HttpGet("http://10.0.2.2:8080/PFI/attendance/facesdata?usr=" + usr + "&d=" + date);    	 
-    	get.setHeader("content-type", "application/json");
-    	String facesData = null;
-		try {
-			HttpResponse resp = httpClient.execute(get);
-			String respStr = EntityUtils.toString(resp.getEntity());
-			 
-	        JSONObject respJSON = new JSONObject(respStr);
-	        facesData = respJSON.getString("facesdata");
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return facesData;
+    	RemoteService remoteService= new RemoteService();
+    	return remoteService.getFacesData(usr);
     }
 }

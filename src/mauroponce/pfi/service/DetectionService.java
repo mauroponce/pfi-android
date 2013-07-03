@@ -8,7 +8,7 @@ import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
 import static com.googlecode.javacv.cpp.opencv_imgproc.CV_BGR2GRAY;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvCvtColor;
 import static com.googlecode.javacv.cpp.opencv_objdetect.cvHaarDetectObjects;
-import mauroponce.pfi.ui.ImageUtils;
+import mauroponce.pfi.utils.ImageUtils;
 import android.os.Environment;
 
 import com.googlecode.javacv.cpp.opencv_core.CvMemStorage;
@@ -31,6 +31,9 @@ public class DetectionService {
 
 		// Load the original image.
 		IplImage originalImage = cvLoadImage(fileInputPath,1);
+		
+		//change the picture size to minimize the recognizing time
+		originalImage = ImageUtils.resizeImage(originalImage, 640, 480);
 
 		// We need a grayscale image in order to do the recognition, so we
 		// create a new image of the same size as the original one.

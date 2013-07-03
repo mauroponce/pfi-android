@@ -1,4 +1,4 @@
-package mauroponce.pfi.ui;
+package mauroponce.pfi.utils;
 
 import static com.googlecode.javacv.cpp.opencv_core.cvCopy;
 import static com.googlecode.javacv.cpp.opencv_core.cvCreateImage;
