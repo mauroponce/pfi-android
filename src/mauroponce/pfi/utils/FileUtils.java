@@ -13,6 +13,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import mauroponce.pfi.ui.MainActivity;
+import mauroponce.pfi.ui.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;

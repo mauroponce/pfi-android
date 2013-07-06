@@ -29,7 +29,10 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        //TODO: When the appliction starts we need to save in the storage the haar classifier to can get it for the detection         
+        //When the appliction starts we need to save in the storage the haar classifier to can get it for the detection
+		String haarcascade = FileUtils.readRawResource(MainActivity.this, R.raw.haarcascade_frontalface_alt);
+		String haarcascadeFileName = "haarcascade_frontalface_alt.xml";
+		FileUtils.write(haarcascadeFileName, haarcascade, MainActivity.this);
         
         editTextUsr = (EditText)findViewById(R.id.editTextUsr);
         btnAccept = (Button)findViewById(R.id.buttonAccept);
@@ -38,7 +41,6 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				//Intent intent = new Intent(MainActivity.this, ResultadoActivity.class);
 				//String facesData = getFacesData(editTextUsr.getText().toString());//mmiralles
 				String facesData = FileUtils.readRawResource(MainActivity.this, R.raw.facedata);

@@ -32,7 +32,7 @@ public class CameraActivity extends Activity {
         intentPicture.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURI);
         
         startActivityForResult(intentPicture,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        imagePath = FileUtils.getRealPathFromURI(mCapturedImageURI, CameraActivity.this)+"/pfi";
+        imagePath = FileUtils.getRealPathFromURI(mCapturedImageURI, CameraActivity.this);
     }
 
 	@Override
@@ -54,7 +54,7 @@ public class CameraActivity extends Activity {
                 
                 ArrayList<Integer> nearestStudents = null;
 				try {
-					DetectionService.detectFaces(imagePath, "nueva");
+					DetectionService.detectFaces(imagePath, "nueva", CameraActivity.this);
 					nearestStudents = doRecognition(3);
 			        
 				} catch (Exception e) {

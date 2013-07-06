@@ -9,7 +9,7 @@ import static com.googlecode.javacv.cpp.opencv_imgproc.CV_BGR2GRAY;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvCvtColor;
 import static com.googlecode.javacv.cpp.opencv_objdetect.cvHaarDetectObjects;
 import mauroponce.pfi.utils.ImageUtils;
-import android.os.Environment;
+import android.content.Context;
 
 import com.googlecode.javacv.cpp.opencv_core.CvMemStorage;
 import com.googlecode.javacv.cpp.opencv_core.CvRect;
@@ -24,9 +24,9 @@ public class DetectionService {
 
 	// The cascade definition to be used for detection.
 //	private static final String CASCADE_FILE = "C:\\Users\\smoral\\Desktop\\tmp\\haarcascade_frontalface_alt.xml";
-	private static final String CASCADE_FILE = Environment.getExternalStorageDirectory().getAbsolutePath()+"/haarcascade_frontalface_alt.xml";
+	private static final String CASCADE_FILE = "/haarcascade_frontalface_alt.xml";
 
-	public static void detectFaces(String fileInputPath, String fileOutputName) throws Exception {
+	public static void detectFaces(String fileInputPath, String fileOutputName, Context context) throws Exception {
 		
 
 		// Load the original image.
@@ -48,7 +48,7 @@ public class DetectionService {
 		// We instantiate a classifier cascade to be used for detection, using
 		// the cascade definition.
 		CvHaarClassifierCascade cascade = new CvHaarClassifierCascade(
-				cvLoad(CASCADE_FILE));
+				cvLoad(context.getFilesDir() + CASCADE_FILE));
 
 		// We detect the faces.
 		CvSeq faces = cvHaarDetectObjects(grayImage, cascade, storage, 1.1, 1,
