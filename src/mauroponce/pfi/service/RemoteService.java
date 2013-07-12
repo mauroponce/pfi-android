@@ -22,15 +22,15 @@ public class RemoteService {
 	 * @param studentLus
 	 * @return
 	 */
-	public List<Student> getStudents(int[] studentLus) {
+	public List<Student> getStudents(List<Integer> studentLus) {
 		List<Student> students = null;
 		HttpClient httpClient = new DefaultHttpClient();
 		String lusForRequest = "";
 		for (int studentLu : studentLus) {
-			if ("".equals(lusForRequest)){
-				lusForRequest += studentLu;
+			if (!"".equals(lusForRequest)){
+				lusForRequest += "_";
 			}
-			lusForRequest += "_"+studentLu;
+			lusForRequest += studentLu;
 		}
 		
 		HttpGet get = new HttpGet(

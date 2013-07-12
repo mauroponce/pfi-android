@@ -8,7 +8,13 @@ import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
 import static com.googlecode.javacv.cpp.opencv_imgproc.CV_BGR2GRAY;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvCvtColor;
 import static com.googlecode.javacv.cpp.opencv_objdetect.cvHaarDetectObjects;
+
+import java.io.File;
+
+import mauroponce.pfi.ui.R;
+import mauroponce.pfi.utils.FileUtils;
 import mauroponce.pfi.utils.ImageUtils;
+import android.app.Activity;
 import android.content.Context;
 
 import com.googlecode.javacv.cpp.opencv_core.CvMemStorage;
@@ -24,7 +30,7 @@ public class DetectionService {
 
 	// The cascade definition to be used for detection.
 //	private static final String CASCADE_FILE = "C:\\Users\\smoral\\Desktop\\tmp\\haarcascade_frontalface_alt.xml";
-	private static final String CASCADE_FILE = "/haarcascade_frontalface_alt.xml";
+	public static final String CASCADE_FILE = "haarcascade_frontalface_alt.xml";
 
 	public static void detectFaces(String fileInputPath, String fileOutputName, Context context) throws Exception {
 		
@@ -46,9 +52,9 @@ public class DetectionService {
 		CvMemStorage storage = CvMemStorage.create();
 
 		// We instantiate a classifier cascade to be used for detection, using
-		// the cascade definition.
+		// the cascade definition.		
 		CvHaarClassifierCascade cascade = new CvHaarClassifierCascade(
-				cvLoad(context.getFilesDir() + CASCADE_FILE));
+				cvLoad(getAbsolutePathOfHaarCascadeClasifier((Activity) context)));
 
 		// We detect the faces.
 		CvSeq faces = cvHaarDetectObjects(grayImage, cascade, storage, 1.1, 1,
@@ -76,6 +82,20 @@ public class DetectionService {
 //		// Save the image to a new file.
 //		cvSaveImage("C:\\Users\\smoral\\Desktop\\tmp\\"+fileOutputName+".jpg", originalImage);
 		System.out.println("Printe image "+fileInputPath);
+	}
+
+	public static void saveHaarCascadeClasifierToInternalStorage(Activity activity) {
+		if(!(new File(getAbsolutePathOfHaarCascadeClasifier(activity)).exists())){
+			String haarcascade = FileUtils.readRawResource(activity, R.raw.haarcascade_frontalface_alt);
+			String haarcascadeFileName = CASCADE_FILE;
+			FileUtils.write(haarcascadeFileName, haarcascade, activity);
+		}
+	}
+
+	private static String getAbsolutePathOfHaarCascadeClasifier(
+			Activity activity) {
+		return activity.getFilesDir().getAbsolutePath() + File.separator
+						+ CASCADE_FILE;
 	}
 
 }

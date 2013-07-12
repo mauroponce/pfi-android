@@ -10,8 +10,8 @@ import static com.googlecode.javacv.cpp.opencv_core.cvReadStringByName;
 import static com.googlecode.javacv.cpp.opencv_core.cvReleaseFileStorage;
 import static com.googlecode.javacv.cpp.opencv_highgui.CV_LOAD_IMAGE_GRAYSCALE;
 import static com.googlecode.javacv.cpp.opencv_highgui.cvLoadImage;
-import static com.googlecode.javacv.cpp.opencv_legacy.cvEigenDecomposite;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvEqualizeHist;
+import static com.googlecode.javacv.cpp.opencv_legacy.cvEigenDecomposite;
 
 import java.util.ArrayList;
 import java.util.Iterator;

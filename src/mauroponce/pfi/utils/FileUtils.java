@@ -12,16 +12,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import mauroponce.pfi.ui.MainActivity;
-import mauroponce.pfi.ui.R;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 
 import com.googlecode.javacv.cpp.opencv_core.CvPoint;
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
@@ -53,9 +54,9 @@ public class FileUtils {
 		StringBuffer buffer = new StringBuffer();
 		try {
 			while ((lineread = filereader.readLine()) != null) {
-				buffer.append(lineread);
-				filereader.close();
+				buffer.append(lineread+"\r\n");				
 			}
+			filereader.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -168,4 +169,34 @@ public class FileUtils {
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+
+	/** Create a file Uri for saving an image or video */
+	public static Uri getOutputMediaFileUriFromMediaFile(File mediaFile) {
+	      return Uri.fromFile(mediaFile);	
+	}	
+
+	/** Create a File for saving an image or video */
+	public static File getOutputMediaFile(){
+	    // To be safe, you should check that the SDCard is mounted
+	    // using Environment.getExternalStorageState() before doing this.
+
+	    File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+	              Environment.DIRECTORY_PICTURES), "PFI");
+	    // This location works best if you want the created images to be shared
+	    // between applications and persist after your app has been uninstalled.
+
+	    // Create the storage directory if it does not exist
+	    if (! mediaStorageDir.exists()){
+	        if (! mediaStorageDir.mkdirs()){
+	            Log.d("PFI", "failed to create directory");
+	            return null;
+	        }
+	    }
+
+	    // Create a media file name
+	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+	    File mediaFile = new File(mediaStorageDir.getPath() + File.separator + "PFI_"+ timeStamp + ".jpg");
+	    return mediaFile;
+	}
+	
 }

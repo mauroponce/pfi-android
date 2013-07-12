@@ -3,6 +3,7 @@ package mauroponce.pfi.ui;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import mauroponce.pfi.service.DetectionService;
 import mauroponce.pfi.service.RemoteService;
 import mauroponce.pfi.utils.FileUtils;
 
@@ -30,9 +31,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         //When the appliction starts we need to save in the storage the haar classifier to can get it for the detection
-		String haarcascade = FileUtils.readRawResource(MainActivity.this, R.raw.haarcascade_frontalface_alt);
-		String haarcascadeFileName = "haarcascade_frontalface_alt.xml";
-		FileUtils.write(haarcascadeFileName, haarcascade, MainActivity.this);
+		DetectionService.saveHaarCascadeClasifierToInternalStorage(MainActivity.this);
         
         editTextUsr = (EditText)findViewById(R.id.editTextUsr);
         btnAccept = (Button)findViewById(R.id.buttonAccept);

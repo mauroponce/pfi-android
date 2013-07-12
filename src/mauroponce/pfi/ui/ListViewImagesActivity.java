@@ -38,7 +38,7 @@ public class ListViewImagesActivity extends Activity {
 
 	private List<Student> getStudents() { 	
 		Intent intent = getIntent();
-		int[] studentLus = intent.getIntArrayExtra(CameraActivity.STUDENTS_LUS_ARRAY);		
+		List<Integer> studentLus = intent.getIntegerArrayListExtra(CameraActivity.STUDENTS_LUS_ARRAY);		
         
         RemoteService remoteService= new RemoteService();
     	return remoteService.getStudents(studentLus);

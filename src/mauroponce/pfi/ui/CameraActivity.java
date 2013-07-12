@@ -1,12 +1,11 @@
 package mauroponce.pfi.ui;
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 
 import mauroponce.pfi.service.DetectionService;
 import mauroponce.pfi.service.RecognitionService;
 import mauroponce.pfi.utils.FileUtils;
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,24 +14,25 @@ import android.widget.Toast;
 
 
 public class CameraActivity extends Activity {
-
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 	public final static String STUDENTS_LUS_ARRAY = "students_lus_array";
 	private String imagePath;
+	private Uri fileUri;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.camera);
-        ContentValues values = new ContentValues();
-        String fileName = String.valueOf(new Date().getTime());
-        values.put(MediaStore.Images.Media.TITLE, fileName);
-        
-        Uri mCapturedImageURI = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-        Intent intentPicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intentPicture.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURI);
-        
-        startActivityForResult(intentPicture,CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-        imagePath = FileUtils.getRealPathFromURI(mCapturedImageURI, CameraActivity.this);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        File mediaFile = FileUtils.getOutputMediaFile();
+        fileUri = FileUtils.getOutputMediaFileUriFromMediaFile(mediaFile); // create a file to save the image
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri); // set the image file name
+
+        // start the image capture Intent
+        startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
+
+        imagePath = mediaFile.getAbsolutePath();        
     }
 
 	@Override
