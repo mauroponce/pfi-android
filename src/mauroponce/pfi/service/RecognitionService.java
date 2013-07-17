@@ -13,6 +13,7 @@ import static com.googlecode.javacv.cpp.opencv_highgui.cvLoadImage;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvEqualizeHist;
 import static com.googlecode.javacv.cpp.opencv_legacy.cvEigenDecomposite;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +21,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import mauroponce.pfi.domain.IndexDistance;
+import mauroponce.pfi.ui.R;
+import mauroponce.pfi.utils.FileUtils;
+import android.app.Activity;
 import android.os.Environment;
 
 import com.googlecode.javacpp.FloatPointer;
@@ -31,7 +35,7 @@ import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 public class RecognitionService {
 	
-	final String DATA_PATH = Environment.getExternalStorageDirectory().getAbsolutePath()+"/facedata.xml"; // TODO: poner el path al archivo en android
+	public static final String FACESDATA_FILE = "facedata.xml";
 	IplImage[] trainingFaceImgArr;
 	private int nTrainFaces = 0;
 	CvMat projectedTrainFaceMat;
@@ -43,12 +47,17 @@ public class RecognitionService {
 	final List<String> personNames = new ArrayList<String>();
 	CvMat personNumTruthMat;
 	IplImage[] testFaceImgArr;
-
+	Activity activity;
+	CvMat trainPersonNumMat;
+	
+	public RecognitionService(Activity activity){
+		this.activity = activity;
+	}
+	
 	/**Finds the k most similar faces.*/
 	public ArrayList<Integer> recognize(final String testImagePath, final int k) {
 		int i = 0;
 		int nTestFaces = 0;
-		CvMat trainPersonNumMat;
 		float[] projectedTestFace;
 		float confidence = 0.0f;
 		ArrayList<Integer> nearestsLus = null;
@@ -78,14 +87,12 @@ public class RecognitionService {
 			final FloatPointer pConfidence = new FloatPointer(confidence);
 			int [] knn = getKNN(projectedTestFace, new FloatPointer(
 					pConfidence), k);
-			iNearest = knn[0];//Tomo el primero. CAMBIAR!!
 			
 			confidence = pConfidence.get();
-			nearest = trainPersonNumMat.data_i().get(iNearest);
-			/*retornar un arreglo de legajos mas cercanos*/
+			nearest = knn[0];
 			nearestsLus = new ArrayList<Integer>();
 			for(int j = 0 ; j < knn.length; j++){
-				nearestsLus.add(trainPersonNumMat.data_i().get(knn[j]));
+				nearestsLus.add(knn[j]);
 			}
 			System.out.println("Mas cercano: " + nearest);
 		}
@@ -97,7 +104,7 @@ public class RecognitionService {
 		CvMat pTrainPersonNumMat = null; // the person numbers during training
 		CvFileStorage fileStorage;
 		int i;
-		fileStorage = cvOpenFileStorage(DATA_PATH, // filename
+		fileStorage = cvOpenFileStorage(getAbsolutePathOfFacesData(activity), // filename
 				null, // memstorage
 				CV_STORAGE_READ, // flags
 				null); // encoding
@@ -242,12 +249,34 @@ public class RecognitionService {
 		}
 		int j = 0;
 		for(Iterator<IndexDistance> it = indexDistances.iterator(); it.hasNext() && j < k; j++){
-			nNearestIndexes[j] = it.next().getIndex();
+			boolean luWasAdded = false;
+			int luToAdd = trainPersonNumMat.data_i().get(it.next().getIndex());
+			for (int luAdded : nNearestIndexes) {
+				if (luAdded == luToAdd){
+					luWasAdded = true;
+					break;
+				}
+			}
+			if (!luWasAdded){
+				nNearestIndexes[j] = luToAdd;
+			}else{
+				j--;
+			}
 		}
 		float pConfidence = (float) (1.0f - Math.sqrt(leastDistSq
 				/ (float) (nTrainFaces * nEigens)) / 255.0f);
 		pConfidencePointer.put(pConfidence);
 		
 		return nNearestIndexes;
+	}
+
+	public static void saveFacesDataToInternalStorage(String facesData, Activity activity) {
+		FileUtils.write(FACESDATA_FILE, facesData, activity);
+	}
+
+	private static String getAbsolutePathOfFacesData(
+			Activity activity) {
+		return activity.getFilesDir().getAbsolutePath() + File.separator
+						+ FACESDATA_FILE;
 	}
 }

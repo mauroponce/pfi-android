@@ -19,8 +19,7 @@ public class JSONUtil {
 	 */
 	public static List<Student> getStudents (String jsonString) throws JSONException{
 		List<Student> students = new ArrayList<Student>();
-		JSONObject respJSON = new JSONObject(jsonString);
-		JSONArray jsonArray = respJSON.getJSONArray("students");
+		JSONArray jsonArray = new JSONArray(jsonString);
 		for (int i = 0; i < jsonArray.length(); i++) {
 			Student student = new Student();
 			JSONObject json = jsonArray.getJSONObject(i);

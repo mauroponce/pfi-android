@@ -84,7 +84,7 @@ public class CameraActivity extends Activity {
 
 	/**Returns the knn's LUs*/
 	private ArrayList<Integer> doRecognition(int knn){
-		RecognitionService recognitionService = new RecognitionService();
+		RecognitionService recognitionService = new RecognitionService(CameraActivity.this);
 		
 		//Hacer q devuelva la lista de LUs
 		return recognitionService.recognize(imagePath, knn);

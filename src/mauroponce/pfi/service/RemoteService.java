@@ -13,10 +13,11 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 public class RemoteService {
 	
+	private String serverIp = "192.168.1.102";
+
 	/**
 	 * Return a list of students from the server, by lus of students. Or an empty array.
 	 * @param studentLus
@@ -32,9 +33,8 @@ public class RemoteService {
 			}
 			lusForRequest += studentLu;
 		}
-		
 		HttpGet get = new HttpGet(
-				"http://10.0.2.2:8080/PFI/attendance/facesdata?usr=" + lusForRequest);
+				"http://"+serverIp+":8080/PFI/student/batch_data/" + lusForRequest);
 		get.setHeader("content-type", "application/json");
 		try {
 			HttpResponse resp = httpClient.execute(get);
@@ -56,21 +56,22 @@ public class RemoteService {
     	HttpClient httpClient = new DefaultHttpClient();
     	 
     	HttpGet get =
-    	    new HttpGet("http://10.0.2.2:8080/PFI/attendance/facesdata?usr=" + usr + "&d=" + date);    	 
+    	    new HttpGet("http://"+serverIp+":8080/PFI/attendance/facesdata?usr=" + usr + "&d=" + date);    	 
     	get.setHeader("content-type", "application/json");
     	String facesData = null;
 		try {
 			HttpResponse resp = httpClient.execute(get);
 			String respStr = EntityUtils.toString(resp.getEntity());
-			 
-	        JSONObject respJSON = new JSONObject(respStr);
-	        facesData = respJSON.getString("facesdata");
+			
+//	        JSONObject respJSON = new JSONObject(respStr);
+//	        facesData = respJSON.getString("facesdata");}
+			facesData = respStr;
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
+//		} catch (JSONException e) {
+//			e.printStackTrace();
 		}
 		return facesData;
     }

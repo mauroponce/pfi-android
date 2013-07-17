@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import mauroponce.pfi.service.DetectionService;
+import mauroponce.pfi.service.RecognitionService;
 import mauroponce.pfi.service.RemoteService;
 import mauroponce.pfi.utils.FileUtils;
 
@@ -41,10 +42,12 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				//Intent intent = new Intent(MainActivity.this, ResultadoActivity.class);
-				//String facesData = getFacesData(editTextUsr.getText().toString());//mmiralles
-				String facesData = FileUtils.readRawResource(MainActivity.this, R.raw.facedata);
-				String fileName = "facesData.xml";
-				FileUtils.write(fileName, facesData, MainActivity.this);
+				String facesData = getFacesData(editTextUsr.getText().toString().trim());//mmiralles
+				RecognitionService.saveFacesDataToInternalStorage(facesData, MainActivity.this);
+				
+//				String facesData = FileUtils.readRawResource(MainActivity.this, R.raw.facedata);
+//				String fileName = "facesData.xml";
+//				FileUtils.write(fileName, facesData, MainActivity.this);
 				
 				//String read = FileUtils.read(fileName, MainActivity.this);
 				//Open from FaceRecognizer
