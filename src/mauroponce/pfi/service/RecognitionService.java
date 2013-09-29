@@ -21,10 +21,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import mauroponce.pfi.domain.IndexDistance;
-import mauroponce.pfi.ui.R;
 import mauroponce.pfi.utils.FileUtils;
 import android.app.Activity;
-import android.os.Environment;
 
 import com.googlecode.javacpp.FloatPointer;
 import com.googlecode.javacpp.Pointer;
@@ -73,7 +71,6 @@ public class RecognitionService {
 		projectedTestFace = new float[nEigens];
 
 		for (i = 0; i < nTestFaces; i++) {
-			int iNearest;
 			int nearest;
 
 			cvEigenDecomposite(testFaceImgArr[i], // obj
