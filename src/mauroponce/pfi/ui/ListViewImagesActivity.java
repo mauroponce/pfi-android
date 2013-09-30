@@ -6,6 +6,9 @@ import java.util.List;
 import mauroponce.pfi.domain.Student;
 import mauroponce.pfi.service.RemoteService;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +22,7 @@ public class ListViewImagesActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {		
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_view);
-        
+        final Context context = this;
         
         List<Student> students = getStudents();
         
@@ -30,11 +33,31 @@ public class ListViewImagesActivity extends Activity {
         	@Override
         	public void onItemClick(AdapterView<?> a, View v, int position, long id) { 
         		Object item = lv1.getItemAtPosition(position);
-        		Student student = (Student)item;
-        		Toast.makeText(ListViewImagesActivity.this, "Alumno seleccionado: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
+        		final Student student = (Student)item;
+//        		Toast.makeText(ListViewImagesActivity.this, "Alumno seleccionado: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
+        		AlertDialog.Builder dialog = new AlertDialog.Builder(context);  
+			    dialog.setTitle("Confirmación");  
+				dialog.setMessage("¿Desea pasar asistencia a "+student.getFullName()+"?");            
+				dialog.setCancelable(false);  
+				dialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {  
+				    public void onClick(DialogInterface dialogo1, int id) {  
+				        saveAttendance(student.getLU());  
+        				Toast.makeText(ListViewImagesActivity.this, "Pasada asistencia a: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
+				    }					
+				});  
+				dialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {  
+				    public void onClick(DialogInterface dialogo1, int id) {
+				    }  
+				});            
+				dialog.show(); 
         	}  
         });
     }
+	
+	private void saveAttendance(Integer studentLu) {
+        RemoteService remoteService= new RemoteService();
+    	remoteService.saveAttendance(studentLu, 4);		
+	}  
 
 	private List<Student> getStudents() { 	
 		Intent intent = getIntent();
