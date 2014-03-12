@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import mauroponce.pfi.service.DetectionService;
 import mauroponce.pfi.service.RecognitionService;
 import mauroponce.pfi.service.RemoteService;
-import mauroponce.pfi.utils.FileUtils;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -18,7 +17,10 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.text.format.Formatter;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -41,6 +43,7 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+				System.out.println(getPublicIpAdress());
 				//Intent intent = new Intent(MainActivity.this, ResultadoActivity.class);
 				String facesData = getFacesData(editTextUsr.getText().toString().trim());//mmiralles
 				RecognitionService.saveFacesDataToInternalStorage(facesData, MainActivity.this);
@@ -98,7 +101,15 @@ public class MainActivity extends Activity {
     }
     
     private String getFacesData(String usr){    	
-    	RemoteService remoteService= new RemoteService();
+    	RemoteService remoteService= RemoteService.GetInstance(MainActivity.this);
     	return remoteService.getFacesData(usr);
+    }
+    
+   
+    private String getPublicIpAdress(){
+    	WifiManager wifiMgr = (WifiManager) getSystemService(WIFI_SERVICE);
+    	WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
+    	int ip = wifiInfo.getIpAddress();
+    	return Formatter.formatIpAddress(ip);
     }
 }

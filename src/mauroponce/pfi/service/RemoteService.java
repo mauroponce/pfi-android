@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 
 import mauroponce.pfi.domain.Student;
+import mauroponce.pfi.ui.R;
+import mauroponce.pfi.utils.FileUtils;
 import mauroponce.pfi.utils.JSONUtil;
 
 import org.apache.http.HttpResponse;
@@ -13,14 +15,42 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
+
 public class RemoteService {
 	
-	private String serverIp = "192.168.1.102";
+	/* The ip 10.0.2.2 Only works on the emulator */
+	/*
+	 * If you use a real device put the public ip of your pc on
+	 * \res\raw\ipconfig and verify that the real android device are in the same
+	 * network
+	 */
+	private String serverIp = "10.0.2.2"; 
+	
+	private static RemoteService instance = null;
 
+	public static RemoteService GetInstance(Activity activity) {
+		if (instance == null){
+			instance = new RemoteService(activity);
+		}
+		
+		return instance;
+	}
+	
+	private RemoteService(Activity activity){
+		String serverIp = FileUtils.readRawResource(activity, R.raw.ipconfig).replace("\r\n", "");
+		if (!"".equals(serverIp)){
+			this.serverIp = serverIp;
+		}
+	}
+	
 	/**
 	 * Return a list of students from the server, by lus of students. Or an empty array.
 	 * @param studentLus
@@ -28,7 +58,7 @@ public class RemoteService {
 	 */
 	public List<Student> getStudents(List<Integer> studentLus) {
 		List<Student> students = null;
-		HttpClient httpClient = new DefaultHttpClient();
+		HttpClient httpClient = getHttpClient();
 		String lusForRequest = "";
 		for (int studentLu : studentLus) {
 			if (!"".equals(lusForRequest)){
@@ -68,7 +98,7 @@ public class RemoteService {
     public String getFacesData(String usr){    	
     	//String date = new DateTime().toString(DateTimeFormat.forPattern("yyyy-MM-dd-HH:mm"));
     	String date = "2012-10-15-09:30";
-    	HttpClient httpClient = new DefaultHttpClient();
+    	HttpClient httpClient = getHttpClient();
     	 
     	HttpGet get =
     	    new HttpGet("http://"+serverIp+":8080/PFI/attendance/facesdata?usr=" + usr + "&d=" + date);    	 
@@ -85,14 +115,26 @@ public class RemoteService {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-//		} catch (JSONException e) {
-//			e.printStackTrace();
 		}
 		return facesData;
     }
 
+	private DefaultHttpClient getHttpClient() {
+		HttpParams httpParameters = new BasicHttpParams();
+		// Set the timeout in milliseconds until a connection is established.
+		// The default value is zero, that means the timeout is not used. 
+		int timeoutConnection = 15000;
+		HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+		// Set the default socket timeout (SO_TIMEOUT) 
+		// in milliseconds which is the timeout for waiting for data.
+		int timeoutSocket = 18000;
+		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+
+		return new DefaultHttpClient(httpParameters);
+	}
+
     private void post(String url, JSONObject datosJSON){
-    	HttpClient httpClient = new DefaultHttpClient();        
+    	HttpClient httpClient = getHttpClient();        
         try {
         	HttpPost post =
                 new HttpPost(url);             

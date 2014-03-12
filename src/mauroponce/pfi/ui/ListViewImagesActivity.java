@@ -41,8 +41,16 @@ public class ListViewImagesActivity extends Activity {
 				dialog.setCancelable(false);  
 				dialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {  
 				    public void onClick(DialogInterface dialogo1, int id) {  
-				        saveAttendance(student.getLU());  
-        				Toast.makeText(ListViewImagesActivity.this, "Pasada asistencia a: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
+				        saveAttendance(student.getLU());
+				        Toast.makeText(ListViewImagesActivity.this, "Pasada asistencia a: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
+				        // if NO selecciono el primero
+        					// desea enviar la imagen para entrenamiento?
+				        	// si
+				        		// conseguir donde esta la imagen actual
+				        		// pasar imagen actual a base64 y pegarle al servicio sendTrainingData
+				        		// post /attendance/send_training_data pasando json con studentLu, encodedImageBase64, fileExtension
+        					
+        					
 				    }					
 				});  
 				dialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {  
@@ -55,7 +63,7 @@ public class ListViewImagesActivity extends Activity {
     }
 	
 	private void saveAttendance(Integer studentLu) {
-        RemoteService remoteService= new RemoteService();
+        RemoteService remoteService= RemoteService.GetInstance(ListViewImagesActivity.this);
     	remoteService.saveAttendance(studentLu, 4);		
 	}  
 
@@ -63,7 +71,7 @@ public class ListViewImagesActivity extends Activity {
 		Intent intent = getIntent();
 		List<Integer> studentLus = intent.getIntegerArrayListExtra(CameraActivity.STUDENTS_LUS_ARRAY);		
         
-        RemoteService remoteService= new RemoteService();
+        RemoteService remoteService= RemoteService.GetInstance(ListViewImagesActivity.this);
     	return remoteService.getStudents(studentLus);
 	}
     
