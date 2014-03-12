@@ -120,6 +120,19 @@ public class RemoteService {
 		}
 	}
 	
+	public void sendTrainingData (Integer studentLu, String encodedImageBase64, String fileExtension) {
+		try {
+			JSONObject datosJSON = new JSONObject();
+			datosJSON.put("studentLU", studentLu);
+			datosJSON.put("encodedImageBase64", encodedImageBase64);
+			datosJSON.put("fileExtension", fileExtension);
+			String url = "http://"+serverIp+":8080/PFI/attendance/send_training_data";
+			this.post(url, datosJSON);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+	}
+	
     public String getFacesData(String usr){    	
     	//String date = new DateTime().toString(DateTimeFormat.forPattern("yyyy-MM-dd-HH:mm"));
     	String date = "2012-10-15-09:30";

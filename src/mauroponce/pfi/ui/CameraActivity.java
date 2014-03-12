@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 public class CameraActivity extends Activity {
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+	public final static String IMAGE_PATH = "image_path";
 	public final static String STUDENTS_LUS_ARRAY = "students_lus_array";
 	private String imagePath;
 	private Uri fileUri;
@@ -66,6 +67,7 @@ public class CameraActivity extends Activity {
 					Intent intent = new Intent(CameraActivity.this, ListViewImagesActivity.class);
 					//intent.putExtra("lus", lus);
 				    intent.putIntegerArrayListExtra(STUDENTS_LUS_ARRAY, nearestStudents);
+				    intent.putExtra(IMAGE_PATH, imagePath);
 			        startActivity(intent);
 				}else{
 					//TODO hacer que vuelva a pedir la foto
