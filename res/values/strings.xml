@@ -2,4 +2,5 @@
 <resources>
     <string name="app_name">User Application</string>
     <string name="usr_label">Nombre de usuario</string>
+    <string name="more_students">Mostrar todos</string>
 </resources>
