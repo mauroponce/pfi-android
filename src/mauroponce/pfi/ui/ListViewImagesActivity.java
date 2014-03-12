@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mauroponce.pfi.domain.Student;
+import mauroponce.pfi.service.RecognitionService;
 import mauroponce.pfi.service.RemoteService;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,12 +13,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class ListViewImagesActivity extends Activity {
+	private static final int COURSE_NUMBER = 3;
+	private Button btnAccept;
+
 	@Override
     public void onCreate(Bundle savedInstanceState) {		
         super.onCreate(savedInstanceState);
@@ -60,11 +66,26 @@ public class ListViewImagesActivity extends Activity {
 				dialog.show(); 
         	}  
         });
+        
+        btnAccept = (Button)findViewById(R.id.buttonMoreStudents);
+        
+        btnAccept.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+		        List<Student> students = getCourseStudents();		        
+//		        final ListView lv1 = (ListView) findViewById(R.id.listV_main);
+		        if (students != null){
+		        	lv1.setAdapter(new ItemListBaseAdapter(context, students));
+		        }
+			}     
+        });
+        
     }
 	
 	private void saveAttendance(Integer studentLu) {
         RemoteService remoteService= RemoteService.GetInstance(ListViewImagesActivity.this);
-    	remoteService.saveAttendance(studentLu, 4);		
+    	remoteService.saveAttendance(studentLu, COURSE_NUMBER);		
 	}  
 
 	private List<Student> getStudents() { 	
@@ -73,6 +94,11 @@ public class ListViewImagesActivity extends Activity {
         
         RemoteService remoteService= RemoteService.GetInstance(ListViewImagesActivity.this);
     	return remoteService.getStudents(studentLus);
+	}
+	
+	private List<Student> getCourseStudents() {		
+		RemoteService remoteService= RemoteService.GetInstance(ListViewImagesActivity.this);
+		return remoteService.getCourseStudents(COURSE_NUMBER);
 	}
     
 	private List<Student> getStudentsFromWebService(){

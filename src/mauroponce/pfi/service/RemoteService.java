@@ -82,6 +82,31 @@ public class RemoteService {
 		}
 		return students;
 	}
+	
+	/**
+	 * Return a all students from course. Or an empty array.
+	 * @param studentLus
+	 * @return
+	 */
+	public List<Student> getCourseStudents(Integer courseId) {
+		List<Student> students = null;
+		HttpClient httpClient = getHttpClient();
+		HttpGet get = new HttpGet(
+				"http://"+serverIp+":8080/PFI/student/course_students/" + courseId);
+		get.setHeader("content-type", "application/json");
+		try {
+			HttpResponse resp = httpClient.execute(get);
+			String respStr = EntityUtils.toString(resp.getEntity());
+			students = JSONUtil.getStudents(respStr); 
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return students;
+	}
 	    
 	public void saveAttendance(Integer studentLu, Integer courseNumber) {
 		try {
