@@ -6,6 +6,7 @@ import java.util.List;
 import mauroponce.pfi.domain.Student;
 import mauroponce.pfi.service.RecognitionService;
 import mauroponce.pfi.service.RemoteService;
+import mauroponce.pfi.utils.FileUtils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -40,6 +41,7 @@ public class ListViewImagesActivity extends Activity {
         	public void onItemClick(AdapterView<?> a, View v, int position, long id) { 
         		Object item = lv1.getItemAtPosition(position);
         		final Student student = (Student)item;
+        		final Integer row = position;
 //        		Toast.makeText(ListViewImagesActivity.this, "Alumno seleccionado: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
         		AlertDialog.Builder dialog = new AlertDialog.Builder(context);  
 			    dialog.setTitle("Confirmación");  
@@ -48,6 +50,9 @@ public class ListViewImagesActivity extends Activity {
 				dialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {  
 				    public void onClick(DialogInterface dialogo1, int id) {  
 				        saveAttendance(student.getLU());
+				        if (row > 0){
+				        	sendTrainingData(student.getLU());
+				        }
 				        Toast.makeText(ListViewImagesActivity.this, "Pasada asistencia a: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
 				        // if NO selecciono el primero
         					// desea enviar la imagen para entrenamiento?
@@ -86,6 +91,14 @@ public class ListViewImagesActivity extends Activity {
 	private void saveAttendance(Integer studentLu) {
         RemoteService remoteService= RemoteService.GetInstance(ListViewImagesActivity.this);
     	remoteService.saveAttendance(studentLu, COURSE_NUMBER);		
+	}  
+	
+	private void sendTrainingData(Integer studentLu) { 	
+		Intent intent = getIntent();
+		String imagePath = intent.getStringExtra(CameraActivity.IMAGE_PATH);
+		RemoteService remoteService= RemoteService.GetInstance(ListViewImagesActivity.this);
+		String encodedImageBase64 = FileUtils.encodeFileBase64(imagePath);
+		remoteService.sendTrainingData(studentLu, encodedImageBase64 , "jpg");		
 	}  
 
 	private List<Student> getStudents() { 	
