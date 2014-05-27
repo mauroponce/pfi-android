@@ -8,6 +8,8 @@ import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
 import static com.googlecode.javacv.cpp.opencv_imgproc.CV_BGR2GRAY;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvCvtColor;
 import static com.googlecode.javacv.cpp.opencv_objdetect.cvHaarDetectObjects;
+import static com.googlecode.javacv.cpp.opencv_objdetect.CV_HAAR_FIND_BIGGEST_OBJECT;
+import static com.googlecode.javacv.cpp.opencv_objdetect.CV_HAAR_DO_ROUGH_SEARCH;
 
 import java.io.File;
 
@@ -96,6 +98,48 @@ public class DetectionService {
 			Activity activity) {
 		return activity.getFilesDir().getAbsolutePath() + File.separator
 						+ CASCADE_FILE;
+	}
+	
+	public static void detectOneFace(String fileInputPath, String fileOutputName, Context context) throws Exception {
+		
+
+		// Load the original image.
+		IplImage originalImage = cvLoadImage(fileInputPath,1);
+		
+		//change the picture size to minimize the recognizing time
+		originalImage = ImageUtils.resizeImage(originalImage, 640, 480);
+
+		// We need a grayscale image in order to do the recognition, so we
+		// create a new image of the same size as the original one.
+		IplImage grayImage = IplImage.create(originalImage.width(),
+				originalImage.height(), IPL_DEPTH_8U, 1);
+
+		// We convert the original image to grayscale.
+		 cvCvtColor(originalImage, grayImage, CV_BGR2GRAY);
+
+		CvMemStorage storage = CvMemStorage.create();
+
+		// We instantiate a classifier cascade to be used for detection, using
+		// the cascade definition.		
+		CvHaarClassifierCascade cascade = new CvHaarClassifierCascade(
+				cvLoad(getAbsolutePathOfHaarCascadeClasifier((Activity) context)));
+
+		// We detect the faces.
+		CvSeq faces = cvHaarDetectObjects(grayImage, cascade, storage, 1.1, CV_HAAR_FIND_BIGGEST_OBJECT|CV_HAAR_DO_ROUGH_SEARCH,
+				0);//CV_HAAR_FIND_BIGGEST_OBJECT|CV_HAAR_DO_ROUGH_SEARCH indicates to find the biggest object and stop the process
+
+		// We iterate over the discovered faces and draw yellow rectangles
+		// around them.
+		if (faces.total()>0){
+			CvRect r = new CvRect(cvGetSeqElem(faces, 0));
+			IplImage imageCropped = ImageUtils.cropImage(originalImage, r);
+			
+			IplImage imageResized = ImageUtils.resizeImage(imageCropped,103,106); 
+			// Save resized image to a new file.
+			
+			cvSaveImage(fileInputPath, imageResized);
+			// System.out.println("Saved image "+fileOutputPath);
+		}
 	}
 
 }

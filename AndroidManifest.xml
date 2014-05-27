@@ -24,6 +24,7 @@
         </activity>
         <activity android:name="mauroponce.pfi.ui.ListViewImagesActivity" />
         <activity android:name="mauroponce.pfi.ui.CameraActivity" />
+        <activity android:name="mauroponce.pfi.ui.ImageDetectedConfirmationActivity" />
     </application>
 
 

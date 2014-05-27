@@ -1,9 +1,6 @@
 package mauroponce.pfi.ui;
 import java.io.File;
-import java.util.ArrayList;
 
-import mauroponce.pfi.service.DetectionService;
-import mauroponce.pfi.service.RecognitionService;
 import mauroponce.pfi.utils.FileUtils;
 import android.app.Activity;
 import android.content.Intent;
@@ -39,59 +36,27 @@ public class CameraActivity extends Activity {
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
-
-            if (resultCode == RESULT_OK) {
-            	
-                // Image captured and saved to fileUri specified in the Intent
-                Toast.makeText(this, "Image saved to:\n" +
-                		imagePath, Toast.LENGTH_LONG).show();
-				//int [] lus = doRecognition(2);
-                //if(lus == null){//no se encontro un proximo con cierta certidumbre
-                	//mostrar dialogo para tomar nueva fotografia
-                //}else{
-//                //Despues de hacer el reconocimiento, borro la imagen
-//                FileUtils.deleteFileInPath(imagePath);//NO ANDA!
-                
-                ArrayList<Integer> nearestStudents = null;
-				try {
-					DetectionService.detectFaces(imagePath, "nueva", CameraActivity.this);
-					nearestStudents = doRecognition(3);
-			        
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-                
-				if (!nearestStudents.isEmpty()){
-					Intent intent = new Intent(CameraActivity.this, ListViewImagesActivity.class);
-					//intent.putExtra("lus", lus);
-				    intent.putIntegerArrayListExtra(STUDENTS_LUS_ARRAY, nearestStudents);
-				    intent.putExtra(IMAGE_PATH, imagePath);
-			        startActivity(intent);
-				}else{
-					//TODO hacer que vuelva a pedir la foto
-				}
-
-            } else if (resultCode == RESULT_CANCELED) {
-
-            	Toast.makeText(this, "Good bye!", Toast.LENGTH_LONG).show();
-            } else {
-
-            	Toast.makeText(this, "Error!", Toast.LENGTH_LONG).show();
-            }
-
+		switch (requestCode) {
+		case CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE: {
+			switch (resultCode) {
+			case RESULT_OK: {
+				Intent intent = new Intent(CameraActivity.this, ImageDetectedConfirmationActivity.class);
+				intent.putExtra(IMAGE_PATH, imagePath);
+		        startActivity(intent);				
+				break;
+			}
+			case RESULT_CANCELED: {
+				Toast.makeText(this, "Tome otra foto", Toast.LENGTH_LONG)
+						.show();
+				break;
+			}
+			default: {
+				Toast.makeText(this, "Error!", Toast.LENGTH_LONG).show();
+				break;
+			}
+			}
+		}
         }
     }	
 
-	/**Returns the knn's LUs*/
-	private ArrayList<Integer> doRecognition(int knn){
-		RecognitionService recognitionService = new RecognitionService(CameraActivity.this);
-		
-		//Hacer q devuelva la lista de LUs
-		return recognitionService.recognize(imagePath, knn);
-	}
-    
-   
-	
 }
