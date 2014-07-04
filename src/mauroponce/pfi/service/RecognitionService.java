@@ -10,6 +10,7 @@ import static com.googlecode.javacv.cpp.opencv_core.cvReadStringByName;
 import static com.googlecode.javacv.cpp.opencv_core.cvReleaseFileStorage;
 import static com.googlecode.javacv.cpp.opencv_highgui.CV_LOAD_IMAGE_GRAYSCALE;
 import static com.googlecode.javacv.cpp.opencv_highgui.cvLoadImage;
+import static com.googlecode.javacv.cpp.opencv_highgui.cvSaveImage;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvEqualizeHist;
 import static com.googlecode.javacv.cpp.opencv_legacy.cvEigenDecomposite;
 
@@ -21,7 +22,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import mauroponce.pfi.domain.IndexDistance;
+import mauroponce.pfi.utils.AppConstants;
 import mauroponce.pfi.utils.FileUtils;
+import mauroponce.pfi.utils.ImageUtils;
 import android.app.Activity;
 
 import com.googlecode.javacpp.FloatPointer;
@@ -168,8 +171,6 @@ public class RecognitionService {
 		IplImage[] faceImgArr;
 		int iFace = 0;
 		int nFaces = 1;
-		int width = -1;
-		int height = -1;
 		nPersons = 0;
 
 		faceImgArr = new IplImage[nFaces];
@@ -185,24 +186,26 @@ public class RecognitionService {
 		personNumTruthMat.put(0, // i
 				iFace, // j
 				personNumber); // v
-		final IplImage faceImage = cvLoadImage(imagePath, // filename
+		IplImage faceImage = cvLoadImage(imagePath, // filename
 				CV_LOAD_IMAGE_GRAYSCALE); // isColor
 		if (faceImage == null) {
 			throw new RuntimeException("Can't load image from " + imagePath);
 		}
-		if (width == -1) {
-			width = faceImage.width();
-			height = faceImage.height();
-		} else if (faceImage.width() != width || faceImage.height() != height) {
-			throw new RuntimeException("wrong size face in " + imagePath
-					+ "\nwanted " + width + "x" + height + ", but found "
-					+ faceImage.width() + "x" + faceImage.height());
+		
+		if (faceImage.width() != AppConstants.WIDTH_STANDARD || faceImage.height() != AppConstants.HEIGHT_STANDARD) {
+			faceImage = ImageUtils.resizeImage(faceImage, AppConstants.WIDTH_STANDARD, AppConstants.HEIGHT_STANDARD);
 		}
+		
 		
 		// Give the image a standard brightness and contrast.
 		cvEqualizeHist(faceImage, faceImage);
 		
-		faceImgArr[iFace] = faceImage;
+		// Save the image for a possible send to the server for training
+		cvSaveImage(imagePath, faceImage);
+		
+		final IplImage finalImage = faceImage;
+		
+		faceImgArr[iFace] = finalImage;
 		iFace++;		
 		return faceImgArr;
 	}

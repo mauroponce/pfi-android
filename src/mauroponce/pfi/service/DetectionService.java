@@ -14,6 +14,7 @@ import static com.googlecode.javacv.cpp.opencv_objdetect.CV_HAAR_DO_ROUGH_SEARCH
 import java.io.File;
 
 import mauroponce.pfi.ui.R;
+import mauroponce.pfi.utils.AppConstants;
 import mauroponce.pfi.utils.FileUtils;
 import mauroponce.pfi.utils.ImageUtils;
 import android.app.Activity;
@@ -40,8 +41,13 @@ public class DetectionService {
 		// Load the original image.
 		IplImage originalImage = cvLoadImage(fileInputPath,1);
 		
-		//change the picture size to minimize the recognizing time
-		originalImage = ImageUtils.resizeImage(originalImage, 640, 480);
+		float resizeRelation = 0.5f;
+		int originalWidth = originalImage.width();
+		int originalHeight = originalImage.height();
+		if (originalWidth > 640 && originalHeight > 480){
+			//change the picture size to minimize the recognizing time
+			originalImage = ImageUtils.resizeImage(originalImage, new Float(originalWidth*resizeRelation).intValue(), new Float(originalHeight*resizeRelation).intValue());
+		}
 
 		// We need a grayscale image in order to do the recognition, so we
 		// create a new image of the same size as the original one.
@@ -74,11 +80,10 @@ public class DetectionService {
 //					CvScalar.YELLOW, 1, CV_AA, 0);
 			
 			// Save cropped image to a new file.
-//			cvSaveImage(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+fileOutputName+"Cropped"+i+".jpg", imageCropped);
-//			IplImage imageResized = ImageUtils.resizeImage(originalImage,103,106); 
-			IplImage imageResized = ImageUtils.resizeImage(imageCropped,103,106);
+//			cvSaveImage(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+fileOutputName+"Cropped"+i+".jpg", imageCropped); 
+//			IplImage imageResized = ImageUtils.resizeImage(imageCropped, AppConstants.WIDTH_STANDARD, AppConstants.HEIGHT_STANDARD);
 			// Save resized image to a new file.
-			cvSaveImage(fileInputPath, imageResized);
+			cvSaveImage(fileInputPath, imageCropped);
 		}
 //
 //		// Save the image to a new file.
@@ -134,10 +139,9 @@ public class DetectionService {
 			CvRect r = new CvRect(cvGetSeqElem(faces, 0));
 			IplImage imageCropped = ImageUtils.cropImage(originalImage, r);
 			
-			IplImage imageResized = ImageUtils.resizeImage(imageCropped,103,106); 
-			// Save resized image to a new file.
-			
-			cvSaveImage(fileInputPath, imageResized);
+			 
+			// Save resized image to a new file.			
+			cvSaveImage(fileInputPath, imageCropped);
 			// System.out.println("Saved image "+fileOutputPath);
 		}
 	}

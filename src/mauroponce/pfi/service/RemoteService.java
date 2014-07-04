@@ -32,7 +32,7 @@ public class RemoteService {
 	 * \res\raw\ipconfig and verify that the real android device are in the same
 	 * network
 	 */
-	private String serverIp = "10.0.2.2"; 
+	private String serverHost = "10.0.2.2:8080"; 
 	
 	private static RemoteService instance = null;
 
@@ -45,9 +45,9 @@ public class RemoteService {
 	}
 	
 	private RemoteService(Activity activity){
-		String serverIp = FileUtils.readRawResource(activity, R.raw.ipconfig).replace("\r\n", "");
-		if (!"".equals(serverIp)){
-			this.serverIp = serverIp;
+		String serverHost = FileUtils.readRawResource(activity, R.raw.ipconfig).replace("\r\n", "");
+		if (!"".equals(serverHost)){
+			this.serverHost = serverHost;
 		}
 	}
 	
@@ -67,7 +67,7 @@ public class RemoteService {
 			lusForRequest += studentLu;
 		}
 		HttpGet get = new HttpGet(
-				"http://"+serverIp+":8080/PFI/student/batch_data/" + lusForRequest);
+				"http://"+serverHost+"/PFI/student/batch_data/" + lusForRequest);
 		get.setHeader("content-type", "application/json");
 		try {
 			HttpResponse resp = httpClient.execute(get);
@@ -92,7 +92,7 @@ public class RemoteService {
 		List<Student> students = null;
 		HttpClient httpClient = getHttpClient();
 		HttpGet get = new HttpGet(
-				"http://"+serverIp+":8080/PFI/student/course_students/" + courseId);
+				"http://"+serverHost+"/PFI/student/course_students/" + courseId);
 		get.setHeader("content-type", "application/json");
 		try {
 			HttpResponse resp = httpClient.execute(get);
@@ -113,7 +113,7 @@ public class RemoteService {
 		    JSONObject datosJSON = new JSONObject();
 				datosJSON.put("studentLU", studentLu);
 			datosJSON.put("courseNumber", courseNumber);
-			String url = "http://"+serverIp+":8080/PFI/attendance/save";
+			String url = "http://"+serverHost+"/PFI/attendance/save";
 			this.post(url, datosJSON);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -126,7 +126,7 @@ public class RemoteService {
 			datosJSON.put("studentLU", studentLu);
 			datosJSON.put("encodedImageBase64", encodedImageBase64);
 			datosJSON.put("fileExtension", fileExtension);
-			String url = "http://"+serverIp+":8080/PFI/attendance/send_training_data";
+			String url = "http://"+serverHost+"/PFI/attendance/send_training_data";
 			this.post(url, datosJSON);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -139,7 +139,7 @@ public class RemoteService {
     	HttpClient httpClient = getHttpClient();
     	 
     	HttpGet get =
-    	    new HttpGet("http://"+serverIp+":8080/PFI/attendance/facesdata?usr=" + usr + "&d=" + date);    	 
+    	    new HttpGet("http://"+serverHost+"/PFI/attendance/facesdata?usr=" + usr + "&d=" + date);    	 
     	get.setHeader("content-type", "application/json");
     	String facesData = null;
 		try {

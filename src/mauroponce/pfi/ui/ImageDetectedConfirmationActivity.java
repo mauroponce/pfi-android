@@ -50,7 +50,7 @@ public class ImageDetectedConfirmationActivity extends Activity {
 		}
 
 		try {
-			DetectionService.detectOneFace(imagePath, "nueva",
+			DetectionService.detectFaces(imagePath, "nueva",
 					ImageDetectedConfirmationActivity.this);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block

@@ -44,6 +44,7 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int cancelar_deteccion=0x7f050003;
         public static final int confirmar_deteccion=0x7f050004;
+        public static final int entrar=0x7f050005;
         public static final int more_students=0x7f050002;
         public static final int usr_label=0x7f050001;
     }
