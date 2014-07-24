@@ -1,23 +1,19 @@
 package mauroponce.pfi.domain;
 
+import java.io.Serializable;
 
-public class Student{
 
-	/*Obtener por medio de un xml (XStream), al enviar los k lu más cercanos
-	 * <students>
-	 *  <student>
-	 *  	<firstName>Mauro Gabriel</firstName>
-	 *  	<lastName>Ponce</lastName>
-	 *  	<LU>131445</LU>
-	 *  	<encodedImage>haskjdhasiugbqkeqwhekqwbejamnasad...</encodedImage>
-	 *  </student>
-	 *  ...
-	 * </students>*/
-	
+public class Student implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String firstName;
 	private String lastName;
 	private Integer LU;
 	private String encodedImage;
+	
+	public Student() {}
 	
 	public String getFirstName() {
 		return firstName;

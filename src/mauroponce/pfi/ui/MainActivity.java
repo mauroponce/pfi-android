@@ -1,22 +1,11 @@
 package mauroponce.pfi.ui;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-
+import mauroponce.pfi.service.ApplicationDataService;
 import mauroponce.pfi.service.DetectionService;
-import mauroponce.pfi.service.RecognitionService;
-import mauroponce.pfi.service.RemoteService;
-
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import mauroponce.pfi.utils.AppConstants;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -30,11 +19,12 @@ public class MainActivity extends Activity {
     
 	EditText editTextUsr;
 	Button btnAccept;
+	ApplicationDataService applicationDataService;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        //When the appliction starts we need to save in the storage the haar classifier to can get it for the detection
-		DetectionService.saveHaarCascadeClasifierToInternalStorage(MainActivity.this);
+        // INITIALIZE APPLICATION
+		initializeApplication();
         
         editTextUsr = (EditText)findViewById(R.id.editTextUsr);
         btnAccept = (Button)findViewById(R.id.buttonAccept);
@@ -44,67 +34,24 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				System.out.println(getPublicIpAdress());
-				//Intent intent = new Intent(MainActivity.this, ResultadoActivity.class);
-				String facesData = getFacesData(editTextUsr.getText().toString().trim());//mmiralles
-				RecognitionService.saveFacesDataToInternalStorage(facesData, MainActivity.this);
-				
-//				String facesData = FileUtils.readRawResource(MainActivity.this, R.raw.facedata);
-//				String fileName = "facesData.xml";
-//				FileUtils.write(fileName, facesData, MainActivity.this);
-				
-				//String read = FileUtils.read(fileName, MainActivity.this);
-				//Open from FaceRecognizer
+				String usr = editTextUsr.getText().toString().trim();
+				applicationDataService.logIn(usr, MainActivity.this);
 				
 				//start camera
 				Intent intent = new Intent(MainActivity.this, CameraActivity.class);
 				//intent.putExtra("lus", lus);
 		        startActivity(intent);
-			}   
-			
-//			@Override
-//			public void onClick(View v) {
-//				try {
-//					DetectionService.detectFaces(Environment.getExternalStorageDirectory().getAbsolutePath()+"/moralalbino.jpg", "nueva");
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} 
-//		        new RecognitionService().recognize(Environment.getExternalStorageDirectory().getAbsolutePath()+"/nuevaResized0.jpg", 3);
-//			}
-        });
-        //post();
-               
+			}
+        });               
     }
 
-    private void post(){
-    	HttpClient httpClient = new DefaultHttpClient();        
-        try {
-        	HttpPost post =
-                new HttpPost("http://10.0.2.2:8080/PFI/attendance/postput");
-             
-            post.setHeader("content-type", "application/json");
-            JSONObject dato = new JSONObject();
-			dato.put("nombre", "Abu Reina!");
-			StringEntity entity = new StringEntity(dato.toString());
-			post.setEntity(entity);
-			httpClient.execute(post);
-			
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    }
-    
-    private String getFacesData(String usr){    	
-    	RemoteService remoteService= RemoteService.GetInstance(MainActivity.this);
-    	return remoteService.getFacesData(usr);
-    }
-    
+	private void initializeApplication() {
+		SharedPreferences preferences = this.getSharedPreferences(AppConstants.PREFERENCES, MODE_PRIVATE);	
+        applicationDataService = ApplicationDataService.getInstance();
+        applicationDataService.initialize(preferences, MainActivity.this);
+		//When the appliction starts we need to save in the storage the haar classifier to can get it for the detection
+		DetectionService.saveHaarCascadeClasifierToInternalStorage(MainActivity.this);
+	}    
    
     private String getPublicIpAdress(){
     	WifiManager wifiMgr = (WifiManager) getSystemService(WIFI_SERVICE);

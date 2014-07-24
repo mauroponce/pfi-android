@@ -1,7 +1,10 @@
 package mauroponce.pfi.service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
+import java.util.Properties;
 
 import mauroponce.pfi.domain.Student;
 import mauroponce.pfi.ui.R;
@@ -45,10 +48,32 @@ public class RemoteService {
 	}
 	
 	private RemoteService(Activity activity){
-		String serverHost = FileUtils.readRawResource(activity, R.raw.ipconfig).replace("\r\n", "");
-		if (!"".equals(serverHost)){
-			this.serverHost = serverHost;
+		String appPropertiesString = FileUtils.readRawResource(activity, R.raw.app_properties);
+		Properties prop = new Properties();
+		try {
+			prop.load(new ByteArrayInputStream(appPropertiesString.getBytes()));
+			String serverHost = prop.getProperty("serverHost");
+			if (!"".equals(serverHost)){
+				this.serverHost = serverHost;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		
+	}
+
+	private DefaultHttpClient getHttpClient() {
+		HttpParams httpParameters = new BasicHttpParams();
+		// Set the timeout in milliseconds until a connection is established.
+		// The default value is zero, that means the timeout is not used. 
+		int timeoutConnection = 15000;
+		HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
+		// Set the default socket timeout (SO_TIMEOUT) 
+		// in milliseconds which is the timeout for waiting for data.
+		int timeoutSocket = 18000;
+		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
+
+		return new DefaultHttpClient(httpParameters);
 	}
 	
 	/**
@@ -56,6 +81,7 @@ public class RemoteService {
 	 * @param studentLus
 	 * @return
 	 */
+	@Deprecated
 	public List<Student> getStudents(List<Integer> studentLus) {
 		List<Student> students = null;
 		HttpClient httpClient = getHttpClient();
@@ -88,6 +114,7 @@ public class RemoteService {
 	 * @param studentLus
 	 * @return
 	 */
+	@Deprecated
 	public List<Student> getCourseStudents(Integer courseId) {
 		List<Student> students = null;
 		HttpClient httpClient = getHttpClient();
@@ -108,6 +135,11 @@ public class RemoteService {
 		return students;
 	}
 	    
+	/**
+	 * Save the attendance of one student for that course
+	 * @param studentLu
+	 * @param courseNumber
+	 */
 	public void saveAttendance(Integer studentLu, Integer courseNumber) {
 		try {
 		    JSONObject datosJSON = new JSONObject();
@@ -120,56 +152,69 @@ public class RemoteService {
 		}
 	}
 	
+	/**
+	 * Send the image taken for training
+	 * @param studentLu
+	 * @param encodedImageBase64
+	 * @param fileExtension
+	 */
 	public void sendTrainingData (Integer studentLu, String encodedImageBase64, String fileExtension) {
 		try {
 			JSONObject datosJSON = new JSONObject();
 			datosJSON.put("studentLU", studentLu);
 			datosJSON.put("encodedImageBase64", encodedImageBase64);
 			datosJSON.put("fileExtension", fileExtension);
-			String url = "http://"+serverHost+"/PFI/attendance/send_training_data";
+			String url = "http://"+serverHost+"/PFI/course/send_training_data";
 			this.post(url, datosJSON);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
 	
-    public String getFacesData(String usr){    	
+    public String logIn(String usr){    	
     	//String date = new DateTime().toString(DateTimeFormat.forPattern("yyyy-MM-dd-HH:mm"));
     	String date = "2012-10-15-09:30";
     	HttpClient httpClient = getHttpClient();
     	 
     	HttpGet get =
-    	    new HttpGet("http://"+serverHost+"/PFI/attendance/facesdata?usr=" + usr + "&d=" + date);    	 
+    	    new HttpGet("http://"+serverHost+"/PFI/attendance/log_in?usr=" + usr + "&d=" + date);    	 
     	get.setHeader("content-type", "application/json");
-    	String facesData = null;
+    	String logInResultJSON = null;
 		try {
 			HttpResponse resp = httpClient.execute(get);
 			String respStr = EntityUtils.toString(resp.getEntity());
 			
 //	        JSONObject respJSON = new JSONObject(respStr);
 //	        facesData = respJSON.getString("facesdata");}
-			facesData = respStr;
+			logInResultJSON = respStr;
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return facesData;
+		return logInResultJSON;
     }
-
-	private DefaultHttpClient getHttpClient() {
-		HttpParams httpParameters = new BasicHttpParams();
-		// Set the timeout in milliseconds until a connection is established.
-		// The default value is zero, that means the timeout is not used. 
-		int timeoutConnection = 15000;
-		HttpConnectionParams.setConnectionTimeout(httpParameters, timeoutConnection);
-		// Set the default socket timeout (SO_TIMEOUT) 
-		// in milliseconds which is the timeout for waiting for data.
-		int timeoutSocket = 18000;
-		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
-
-		return new DefaultHttpClient(httpParameters);
-	}
+    
+    public String getTrainingData(Integer courseNumber){
+    	HttpClient httpClient = getHttpClient();    	
+    	HttpGet get =
+    			new HttpGet("http://"+serverHost+"/PFI/course/get_training_data/" + courseNumber);    	 
+    	get.setHeader("content-type", "application/json");
+    	String facesDataJSON = null;
+    	try {
+    		HttpResponse resp = httpClient.execute(get);
+    		String respStr = EntityUtils.toString(resp.getEntity());
+    		
+//	        JSONObject respJSON = new JSONObject(respStr);
+//	        facesData = respJSON.getString("facesdata");}
+    		facesDataJSON = respStr;
+    	} catch (ClientProtocolException e) {
+    		e.printStackTrace();
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+    	return facesDataJSON;
+    }
 
     private void post(String url, JSONObject datosJSON){
     	HttpClient httpClient = getHttpClient();        

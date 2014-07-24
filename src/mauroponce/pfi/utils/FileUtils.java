@@ -97,17 +97,6 @@ public class FileUtils {
 		return Base64.encodeToString(fileData,  Base64.DEFAULT);
 	}
 	
-	public static void decodeFileBase64(String base64String, String outputPath) {
-        byte[] fileData = Base64.decode(base64String, Base64.DEFAULT);
-		try {
-			FileOutputStream fileOutputStream = new FileOutputStream(outputPath);
-			fileOutputStream.write(fileData);
-	        fileOutputStream.close();    
-		} catch (Exception e) {
-			e.printStackTrace();
-		}            
-    }
-	
 	public static byte[] decodeFileBase64(String base64String){
 		return Base64.decode(base64String, Base64.DEFAULT);
 	}

@@ -3,13 +3,18 @@ package mauroponce.pfi.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import mauroponce.pfi.domain.Course;
+import mauroponce.pfi.domain.FacesData;
 import mauroponce.pfi.domain.Student;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JSONUtil {	
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+public class JSONUtil<T> {	
 	
 	/**
 	 * Return the list of students from json, or an empty array 
@@ -30,5 +35,20 @@ public class JSONUtil {
 			students.add(student);
 		}
 		return students;
+	}
+	
+	public Course getCourseFromJson(String json) {
+		Gson gson = new Gson();
+		return gson.fromJson(json, new TypeToken<Course>(){}.getType());
+	}
+	
+	public FacesData getFacesDataFromJson(String json) {
+		Gson gson = new Gson();
+		return gson.fromJson(json, new TypeToken<FacesData>(){}.getType());
+	}
+	
+	public List<T> getListFromJson(String json) {
+		Gson gson = new Gson();
+		return gson.fromJson(json, new TypeToken<List<T>>(){}.getType());
 	}
 }
