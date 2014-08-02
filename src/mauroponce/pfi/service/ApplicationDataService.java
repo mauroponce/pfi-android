@@ -5,11 +5,13 @@ import java.util.List;
 import mauroponce.pfi.domain.Course;
 import mauroponce.pfi.domain.FacesData;
 import mauroponce.pfi.domain.Student;
+import mauroponce.pfi.utils.AppConstants;
 import mauroponce.pfi.utils.FileUtils;
 import mauroponce.pfi.utils.JSONUtil;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.util.Log;
 
 public class ApplicationDataService {
 	private static final String FACES_DATA_JSON = "facesDataJson";
@@ -78,6 +80,7 @@ public class ApplicationDataService {
 				hasToUpdateFacesData = Boolean.TRUE;				
 			}
 			if (hasToUpdateFacesData){
+				Log.i(AppConstants.TAG, "hasToUpdateFacesData");
 				String newFacesDataJSON = remoteService.getTrainingData(courseNumber);
 				if (newFacesDataJSON != null){
 					this.saveFacesDataJson(newFacesDataJSON, courseNumber);

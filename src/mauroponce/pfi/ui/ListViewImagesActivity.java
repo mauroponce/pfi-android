@@ -51,25 +51,42 @@ public class ListViewImagesActivity extends Activity {
 				dialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {  
 				    public void onClick(DialogInterface dialogo1, int id) {  
 				        saveAttendance(student.getLU());
+				        Toast.makeText(ListViewImagesActivity.this, "Pasada asistencia a: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
 				        if (row > 0){
 				        	sendTrainingData(student.getLU());
-				        }
-				        Toast.makeText(ListViewImagesActivity.this, "Pasada asistencia a: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
-				        // if NO selecciono el primero
-        					// desea enviar la imagen para entrenamiento?
-				        	// si
-				        		// conseguir donde esta la imagen actual
-				        		// pasar imagen actual a base64 y pegarle al servicio sendTrainingData
-				        		// post /attendance/send_training_data pasando json con studentLu, encodedImageBase64, fileExtension
-        					
-        					
+					        AlertDialog.Builder sendImagedialog = new AlertDialog.Builder(context);  
+						    sendImagedialog.setTitle("Confirmación");  
+							sendImagedialog.setMessage("¿Desea enviar la imagen de "+student.getFullName()+" para entrenamiento?");            
+							sendImagedialog.setCancelable(false);  
+							sendImagedialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {  
+							    public void onClick(DialogInterface dialogo1, int id) {
+						        	sendTrainingData(student.getLU());
+							        Toast.makeText(ListViewImagesActivity.this, "Imagen enviada de: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();	
+							        //start camera
+							        Intent intent = new Intent(ListViewImagesActivity.this, CameraActivity.class);
+							        startActivity(intent);
+							    }					
+							});  
+							sendImagedialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {  
+							    public void onClick(DialogInterface dialogo1, int id) {
+							        //start camera
+							        Intent intent = new Intent(ListViewImagesActivity.this, CameraActivity.class);
+							        startActivity(intent);
+							    }  
+							});            
+							sendImagedialog.show(); 
+				        }else{
+				        	//start camera
+				        	Intent intent = new Intent(ListViewImagesActivity.this, CameraActivity.class);
+				        	startActivity(intent);
+				        }				        
 				    }					
 				});  
 				dialog.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {  
 				    public void onClick(DialogInterface dialogo1, int id) {
 				    }  
 				});            
-				dialog.show(); 
+				dialog.show();
         	}  
         });
         
@@ -107,11 +124,13 @@ public class ListViewImagesActivity extends Activity {
 		List<Integer> studentLus = intent.getIntegerArrayListExtra(CameraActivity.STUDENTS_LUS_ARRAY);		
         List<Student> courseStudents = this.getCourseStudents();
         List<Student> aux = new ArrayList<Student>();
-        for (Student courseStudent : courseStudents) {
-			if (studentLus.contains(courseStudent.getLU())){
-				aux.add(courseStudent);
+        for (Integer studentLu : studentLus) {			
+	        for (Student student : courseStudents) {
+				if (student.getLU().equals(studentLu)){
+					aux.add(student);
+				}
 			}
-		}
+        }
         return aux;
 	}
 	
