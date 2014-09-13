@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
     }
 
 	public void login(final String usr) {
-		final ProgressDialog loginDialog = ProgressDialog.show(MainActivity.this, "Iniciando Sesión",	"Por favor espere...");
+		final ProgressDialog loginDialog = ProgressDialog.show(MainActivity.this, "Iniciando SesiÃ³n",	"Por favor espere...");
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

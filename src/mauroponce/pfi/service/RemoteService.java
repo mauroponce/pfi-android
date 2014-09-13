@@ -2,14 +2,10 @@ package mauroponce.pfi.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
-import java.util.List;
 import java.util.Properties;
 
-import mauroponce.pfi.domain.Student;
 import mauroponce.pfi.ui.R;
 import mauroponce.pfi.utils.FileUtils;
-import mauroponce.pfi.utils.JSONUtil;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -74,65 +70,6 @@ public class RemoteService {
 		HttpConnectionParams.setSoTimeout(httpParameters, timeoutSocket);
 
 		return new DefaultHttpClient(httpParameters);
-	}
-	
-	/**
-	 * Return a list of students from the server, by lus of students. Or an empty array.
-	 * @param studentLus
-	 * @return
-	 */
-	@Deprecated
-	public List<Student> getStudents(List<Integer> studentLus) {
-		List<Student> students = null;
-		HttpClient httpClient = getHttpClient();
-		String lusForRequest = "";
-		for (int studentLu : studentLus) {
-			if (!"".equals(lusForRequest)){
-				lusForRequest += "_";
-			}
-			lusForRequest += studentLu;
-		}
-		HttpGet get = new HttpGet(
-				"http://"+serverHost+"/PFI/student/batch_data/" + lusForRequest);
-		get.setHeader("content-type", "application/json");
-		try {
-			HttpResponse resp = httpClient.execute(get);
-			String respStr = EntityUtils.toString(resp.getEntity());
-			students = JSONUtil.getStudents(respStr); 
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return students;
-	}
-	
-	/**
-	 * Return a all students from course. Or an empty array.
-	 * @param studentLus
-	 * @return
-	 */
-	@Deprecated
-	public List<Student> getCourseStudents(Integer courseId) {
-		List<Student> students = null;
-		HttpClient httpClient = getHttpClient();
-		HttpGet get = new HttpGet(
-				"http://"+serverHost+"/PFI/student/course_students/" + courseId);
-		get.setHeader("content-type", "application/json");
-		try {
-			HttpResponse resp = httpClient.execute(get);
-			String respStr = EntityUtils.toString(resp.getEntity());
-			students = JSONUtil.getStudents(respStr); 
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return students;
 	}
 	    
 	/**

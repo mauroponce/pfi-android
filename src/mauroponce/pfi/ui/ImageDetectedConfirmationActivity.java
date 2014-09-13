@@ -9,7 +9,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -82,7 +81,7 @@ public class ImageDetectedConfirmationActivity extends Activity {
 					intent.putExtra(IMAGE_PATH, imagePath);
 					startActivity(intent);
 				} else {
-					Toast.makeText(ImageDetectedConfirmationActivity.this, "No se detectó ningún rostro, tome otra fotografía.",
+					Toast.makeText(ImageDetectedConfirmationActivity.this, "No se detectÃ³ ningÃºn rostro, tome otra fotografï¿½a.",
 							Toast.LENGTH_LONG).show();
 					Intent intent = new Intent(ImageDetectedConfirmationActivity.this, CameraActivity.class);
 			        startActivity(intent);
