@@ -3,8 +3,10 @@ package mauroponce.pfi.ui;
 import java.util.List;
 
 import mauroponce.pfi.domain.Student;
+import mauroponce.pfi.utils.AppConstants;
 import mauroponce.pfi.utils.FileUtils;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,8 +62,9 @@ public class ItemListBaseAdapter extends BaseAdapter {
 		
 		byte[] imageAsBytes = FileUtils.decodeFileBase64(students.get(position).getEncodedImage());
 		
-		holder.photo.setImageBitmap(BitmapFactory
-				.decodeByteArray(imageAsBytes, 0, imageAsBytes.length));
+		Bitmap studentBitmap = BitmapFactory
+				.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+		holder.photo.setImageBitmap(Bitmap.createScaledBitmap(studentBitmap, AppConstants.WIDTH_UADE, AppConstants.HEIGHT_UADE, false));
 
 		return convertView;
 	}

@@ -89,10 +89,12 @@ public class ApplicationDataService {
 			}
 		}
 		// Save the facesdata to a file, to be used on recognition
-		String facesDataString = new String(
-				FileUtils.decodeFileBase64(facesDataActual
-						.getEncodedFacesData()));  
-		RecognitionService.saveFacesDataToInternalStorage(facesDataString, activity);
+		if (facesDataActual != null){
+			String facesDataString = new String(
+					FileUtils.decodeFileBase64(facesDataActual
+							.getEncodedFacesData()));  
+			RecognitionService.saveFacesDataToInternalStorage(facesDataString, activity);
+		}
 	}
 	
 	public List<Student> getCourseStudents(){
