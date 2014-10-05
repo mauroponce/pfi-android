@@ -16,6 +16,8 @@ public class CameraActivity extends Activity {
 	public final static String STUDENTS_LUS_ARRAY = "students_lus_array";
 	private String imagePath;
 	private Uri fileUri;
+
+//	Commit test para conicet
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
