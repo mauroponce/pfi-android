@@ -19,7 +19,6 @@
     <requestFocus />
 </EditText>
 
-<!-- Commit test para conicet -->
 
 <Button
     android:id="@+id/buttonAccept"

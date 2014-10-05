@@ -17,7 +17,6 @@ public class CameraActivity extends Activity {
 	private String imagePath;
 	private Uri fileUri;
 
-//	Commit test para conicet
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
