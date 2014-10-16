@@ -4,8 +4,10 @@
     android:installLocation="preferExternal"
     android:versionCode="1"
     android:versionName="1.0" >
-
-    <uses-sdk android:minSdkVersion="8" />
+    
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
     
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -22,9 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="mauroponce.pfi.ui.ListViewImagesActivity" />
-        <activity android:name="mauroponce.pfi.ui.CameraActivity" />
-        <activity android:name="mauroponce.pfi.ui.ImageDetectedConfirmationActivity"/>
+        <activity android:name="mauroponce.pfi.ui.ListViewImagesActivity" 
+            android:screenOrientation="portrait" />
+        <activity android:name="mauroponce.pfi.ui.CameraActivity" 
+            android:screenOrientation="portrait" />
+        <activity android:name="mauroponce.pfi.ui.ImageDetectedConfirmationActivity" 
+            android:screenOrientation="portrait" />
     </application>
 
 

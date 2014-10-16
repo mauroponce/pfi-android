@@ -7,11 +7,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.format.Formatter;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,7 +34,6 @@ public class MainActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				System.out.println(getPublicIpAdress());
 				String usr = editTextUsr.getText().toString().trim();
 				MainActivity mainActivity = (MainActivity) v.getContext();
 				mainActivity.login(usr);
@@ -51,14 +47,7 @@ public class MainActivity extends Activity {
         applicationDataService.initialize(preferences, MainActivity.this);
 		//When the appliction starts we need to save in the storage the haar classifier to can get it for the detection
 		DetectionService.saveHaarCascadeClasifierToInternalStorage(MainActivity.this);
-	}    
-   
-    private String getPublicIpAdress(){
-    	WifiManager wifiMgr = (WifiManager) getSystemService(WIFI_SERVICE);
-    	WifiInfo wifiInfo = wifiMgr.getConnectionInfo();
-    	int ip = wifiInfo.getIpAddress();
-    	return Formatter.formatIpAddress(ip);
-    }
+	}
 
 	public void login(final String usr) {
 		final ProgressDialog loginDialog = ProgressDialog.show(MainActivity.this, "Iniciando Sesión",	"Por favor espere...");
