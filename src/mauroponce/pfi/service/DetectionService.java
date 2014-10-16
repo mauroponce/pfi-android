@@ -82,6 +82,7 @@ public class DetectionService {
 //			cvSaveImage(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+fileOutputName+"Cropped"+i+".jpg", imageCropped); 
 //			IplImage imageResized = ImageUtils.resizeImage(imageCropped, AppConstants.WIDTH_STANDARD, AppConstants.HEIGHT_STANDARD);
 			// Save resized image to a new file.
+			cvSaveImage(fileInputPath.split(".jpg")[0]+"detected.jpg", imageCropped);
 			cvSaveImage(fileInputPath, imageCropped);
 		}
 //

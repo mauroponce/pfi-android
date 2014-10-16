@@ -188,12 +188,15 @@ public class RecognitionService {
 				personNumber); // v
 		IplImage faceImage = cvLoadImage(imagePath, // filename
 				CV_LOAD_IMAGE_GRAYSCALE); // isColor
+
+		 cvSaveImage(imagePath.split(".jpg")[0]+"grey.jpg", faceImage);
 		if (faceImage == null) {
 			throw new RuntimeException("Can't load image from " + imagePath);
 		}
 		
 		if (faceImage.width() != AppConstants.WIDTH_STANDARD || faceImage.height() != AppConstants.HEIGHT_STANDARD) {
 			faceImage = ImageUtils.resizeImage(faceImage, AppConstants.WIDTH_STANDARD, AppConstants.HEIGHT_STANDARD);
+			cvSaveImage(imagePath.split(".jpg")[0]+"standarizedsize.jpg", faceImage);
 		}
 		
 		
