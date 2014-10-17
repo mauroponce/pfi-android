@@ -45,18 +45,17 @@ public class ListViewImagesActivity extends Activity {
         		final Integer row = position;
 //        		Toast.makeText(ListViewImagesActivity.this, "Alumno seleccionado: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
         		AlertDialog.Builder dialog = new AlertDialog.Builder(context);  
-			    dialog.setTitle("Confirmación");  
-				dialog.setMessage("¿Desea pasar asistencia a "+student.getFullName()+"?");            
+			    dialog.setTitle("ConfirmaciÃ³n");  
+				dialog.setMessage("Â¿Desea pasar asistencia a "+student.getFullName()+"?");            
 				dialog.setCancelable(false);  
 				dialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {  
-				    public void onClick(DialogInterface dialogo1, int id) {  
-				        saveAttendance(student.getLU());
+				    public void onClick(DialogInterface dialogo1, int id) {
 				        Toast.makeText(ListViewImagesActivity.this, "Pasada asistencia a: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
 				        if (row > 0){
 				        	sendTrainingData(student.getLU());
 					        AlertDialog.Builder sendImagedialog = new AlertDialog.Builder(context);  
-						    sendImagedialog.setTitle("Confirmación");  
-							sendImagedialog.setMessage("¿Desea enviar la imagen de "+student.getFullName()+" para entrenamiento?");            
+						    sendImagedialog.setTitle("ConfirmaciÃ³n");  
+							sendImagedialog.setMessage("Â¿Desea enviar la imagen de "+student.getFullName()+" para entrenamiento?");            
 							sendImagedialog.setCancelable(false);  
 							sendImagedialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {  
 							    public void onClick(DialogInterface dialogo1, int id) {

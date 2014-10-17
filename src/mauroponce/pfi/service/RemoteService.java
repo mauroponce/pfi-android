@@ -58,7 +58,7 @@ public class RemoteService {
 		
 	}
 
-	private DefaultHttpClient getHttpClient() {
+	public DefaultHttpClient getHttpClient() {
 		HttpParams httpParameters = new BasicHttpParams();
 		// Set the timeout in milliseconds until a connection is established.
 		// The default value is zero, that means the timeout is not used. 
@@ -154,18 +154,10 @@ public class RemoteService {
     }
 
     private void post(String url, JSONObject datosJSON){
-    	HttpClient httpClient = getHttpClient();        
-        try {
-        	HttpPost post =
-                new HttpPost(url);             
-            post.setHeader("content-type", "application/json");            
-			StringEntity entity = new StringEntity(datosJSON.toString());
-			post.setEntity(entity);
-			httpClient.execute(post);			
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    	String[] params = new String[2];
+    	params[0] = url;
+    	params[1] = datosJSON.toString();
+    	PostDataService post = new PostDataService();
+    	post.execute(params);
     }
 }
