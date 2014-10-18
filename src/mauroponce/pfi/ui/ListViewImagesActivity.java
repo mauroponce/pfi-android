@@ -52,7 +52,6 @@ public class ListViewImagesActivity extends Activity {
 				    public void onClick(DialogInterface dialogo1, int id) {
 				        Toast.makeText(ListViewImagesActivity.this, "Pasada asistencia a: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
 				        if (row > 0){
-				        	sendTrainingData(student.getLU());
 					        AlertDialog.Builder sendImagedialog = new AlertDialog.Builder(context);  
 						    sendImagedialog.setTitle("Confirmación");  
 							sendImagedialog.setMessage("¿Desea enviar la imagen de "+student.getFullName()+" para entrenamiento?");            
