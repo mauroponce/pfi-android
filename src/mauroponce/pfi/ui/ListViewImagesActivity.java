@@ -50,6 +50,7 @@ public class ListViewImagesActivity extends Activity {
 				dialog.setCancelable(false);  
 				dialog.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {  
 				    public void onClick(DialogInterface dialogo1, int id) {
+				        saveAttendance(student.getLU());
 				        Toast.makeText(ListViewImagesActivity.this, "Pasada asistencia a: " + " " + student.getFullName(), Toast.LENGTH_LONG).show();
 				        if (row > 0){
 					        AlertDialog.Builder sendImagedialog = new AlertDialog.Builder(context);  
