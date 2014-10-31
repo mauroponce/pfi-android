@@ -1,7 +1,9 @@
-package mauroponce.pfi.ui;
+package poncemoral.pfi.ui;
 import java.io.File;
 
-import mauroponce.pfi.utils.FileUtils;
+import poncemoral.pfi.ui.R;
+import poncemoral.pfi.utils.FileUtils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;

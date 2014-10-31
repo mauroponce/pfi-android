@@ -1,4 +1,4 @@
-package mauroponce.pfi.utils;
+package poncemoral.pfi.utils;
 
 public class AppConstants {
 	public static final String TAG = "poncemoral.pfi";

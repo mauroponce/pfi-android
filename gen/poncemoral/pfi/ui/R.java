@@ -5,7 +5,7 @@
  * should not be modified by hand.
  */
 
-package mauroponce.pfi.ui;
+package poncemoral.pfi.ui;
 
 public final class R {
     public static final class attr {

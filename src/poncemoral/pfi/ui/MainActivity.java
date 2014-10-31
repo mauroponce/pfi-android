@@ -1,8 +1,9 @@
-package mauroponce.pfi.ui;
+package poncemoral.pfi.ui;
 
-import mauroponce.pfi.service.ApplicationDataService;
-import mauroponce.pfi.service.DetectionService;
-import mauroponce.pfi.utils.AppConstants;
+import poncemoral.pfi.service.ApplicationDataService;
+import poncemoral.pfi.service.DetectionService;
+import poncemoral.pfi.ui.R;
+import poncemoral.pfi.utils.AppConstants;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;

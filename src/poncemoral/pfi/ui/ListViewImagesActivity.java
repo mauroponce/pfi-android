@@ -1,12 +1,14 @@
-package mauroponce.pfi.ui;
+package poncemoral.pfi.ui;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import mauroponce.pfi.domain.Student;
-import mauroponce.pfi.service.ApplicationDataService;
-import mauroponce.pfi.service.RemoteService;
-import mauroponce.pfi.utils.FileUtils;
+import poncemoral.pfi.domain.Student;
+import poncemoral.pfi.service.ApplicationDataService;
+import poncemoral.pfi.service.RemoteService;
+import poncemoral.pfi.ui.R;
+import poncemoral.pfi.utils.FileUtils;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;

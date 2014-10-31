@@ -1,4 +1,4 @@
-package mauroponce.pfi.service;
+package poncemoral.pfi.service;
 
 import static com.googlecode.javacv.cpp.opencv_core.IPL_DEPTH_8U;
 import static com.googlecode.javacv.cpp.opencv_core.cvGetSeqElem;
@@ -13,9 +13,11 @@ import static com.googlecode.javacv.cpp.opencv_objdetect.cvHaarDetectObjects;
 
 import java.io.File;
 
-import mauroponce.pfi.ui.R;
-import mauroponce.pfi.utils.FileUtils;
-import mauroponce.pfi.utils.ImageUtils;
+import poncemoral.pfi.ui.R;
+import poncemoral.pfi.utils.FileUtils;
+import poncemoral.pfi.utils.ImageUtils;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 
@@ -28,6 +30,7 @@ import com.googlecode.javacv.cpp.opencv_objdetect.CvHaarClassifierCascade;
 /***
  * http://blog.csdn.net/ljsspace/article/details/6664011
  */
+@SuppressLint("UseValueOf")
 public class DetectionService {
 
 	// The cascade definition to be used for detection.

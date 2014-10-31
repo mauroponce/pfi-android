@@ -1,4 +1,4 @@
-package mauroponce.pfi.utils;
+package poncemoral.pfi.utils;
 
 import static com.googlecode.javacv.cpp.opencv_core.cvConvertScale;
 import static com.googlecode.javacv.cpp.opencv_core.cvCreateImage;

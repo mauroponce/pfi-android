@@ -1,4 +1,4 @@
-package mauroponce.pfi.domain;
+package poncemoral.pfi.domain;
 
 @SuppressWarnings("rawtypes")
 public class IndexDistance implements Comparable{

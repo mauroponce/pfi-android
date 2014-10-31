@@ -1,10 +1,12 @@
-package mauroponce.pfi.ui;
+package poncemoral.pfi.ui;
 
 import java.util.List;
 
-import mauroponce.pfi.domain.Student;
-import mauroponce.pfi.utils.AppConstants;
-import mauroponce.pfi.utils.FileUtils;
+import poncemoral.pfi.domain.Student;
+import poncemoral.pfi.ui.R;
+import poncemoral.pfi.utils.AppConstants;
+import poncemoral.pfi.utils.FileUtils;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

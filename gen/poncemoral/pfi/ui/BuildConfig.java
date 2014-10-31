@@ -1,5 +1,5 @@
 /** Automatically generated file. DO NOT MODIFY */
-package mauroponce.pfi.ui;
+package poncemoral.pfi.ui;
 
 public final class BuildConfig {
     public final static boolean DEBUG = true;
