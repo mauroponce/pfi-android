@@ -2,7 +2,6 @@ package poncemoral.pfi.ui;
 
 import poncemoral.pfi.service.ApplicationDataService;
 import poncemoral.pfi.service.DetectionService;
-import poncemoral.pfi.ui.R;
 import poncemoral.pfi.utils.AppConstants;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -19,6 +18,7 @@ public class MainActivity extends Activity {
     
 	EditText editTextUsr;
 	Button btnAccept;
+	Button btnOptions;
 	ApplicationDataService applicationDataService;
 	Handler loginHandler;
 	
@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
 		loginHandler = new Handler();
         editTextUsr = (EditText)findViewById(R.id.editTextUsr);
         btnAccept = (Button)findViewById(R.id.buttonAccept);
+        btnOptions = (Button)findViewById(R.id.buttonOptions);
         
         btnAccept.setOnClickListener(new OnClickListener() {
 
@@ -39,7 +40,15 @@ public class MainActivity extends Activity {
 				MainActivity mainActivity = (MainActivity) v.getContext();
 				mainActivity.login(usr);
 			}
-        });               
+        });
+        
+        btnOptions.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+				startActivity(intent);
+			}
+        });
     }
 
 	private void initializeApplication() {

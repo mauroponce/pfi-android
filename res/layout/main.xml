@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-<TextView  
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/usr_label"
-    />
+    android:orientation="vertical" >
 
-<EditText
-    android:id="@+id/editTextUsr"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="smoral" >
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/usr_label" />
 
-    <requestFocus />
-</EditText>
+    <EditText
+        android:id="@+id/editTextUsr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/usr_name_default" 
+        android:inputType="text">
 
+        <requestFocus />
+    </EditText>
 
-<Button
-    android:id="@+id/buttonAccept"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/entrar"/>
+    <Button
+        android:id="@+id/buttonAccept"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/entrar" />
+
+    <Button
+        android:id="@+id/buttonOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:text="@string/title_activity_settings" />
 
 </LinearLayout>

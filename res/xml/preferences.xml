@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="pref_server_ip"
+        android:title="@string/server_ip"
+        android:summary="@string/server_ip_sum"
+        android:defaultValue="@string/server_ip_default" />
+</PreferenceScreen>

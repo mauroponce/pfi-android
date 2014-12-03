@@ -13,7 +13,7 @@ public class PostDataService extends AsyncTask<String, Void, String> {
 
 	@Override
 	protected String doInBackground(String... params) {
-		HttpClient httpClient = RemoteService.GetInstance(null).getHttpClient();        
+		HttpClient httpClient = RemoteService.GetInstance().getHttpClient();        
         try {
         	String url = params[0];
         	String jsonString = params[1];

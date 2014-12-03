@@ -108,16 +108,16 @@ public class ListViewImagesActivity extends Activity {
     }
 	
 	private void saveAttendance(Integer studentLu) {
-        RemoteService remoteService= RemoteService.GetInstance(ListViewImagesActivity.this);
-    	remoteService.saveAttendance(studentLu, applicationDataService.getCourseNumber());		
+        RemoteService remoteService= RemoteService.GetInstance();
+    	remoteService.saveAttendance(studentLu, applicationDataService.getCourseNumber(), ListViewImagesActivity.this);		
 	}  
 	
 	private void sendTrainingData(Integer studentLu) { 	
 		Intent intent = getIntent();
 		String imagePath = intent.getStringExtra(CameraActivity.IMAGE_PATH);
-		RemoteService remoteService= RemoteService.GetInstance(ListViewImagesActivity.this);
+		RemoteService remoteService= RemoteService.GetInstance();
 		String encodedImageBase64 = FileUtils.encodeFileBase64(imagePath);
-		remoteService.sendTrainingData(studentLu, encodedImageBase64 , "jpg");		
+		remoteService.sendTrainingData(studentLu, encodedImageBase64 , "jpg", ListViewImagesActivity.this);		
 	}  
 
 	private List<Student> getStudents() { 	

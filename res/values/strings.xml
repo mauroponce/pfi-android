@@ -6,4 +6,9 @@
     <string name="cancelar_deteccion">Cancelar</string>
     <string name="confirmar_deteccion">Confirmar</string>
     <string name="entrar">Entrar</string>
+    <string name="server_ip">Server Host</string>
+    <string name="server_ip_sum">Designa la ip del servidor con la base de imágenes</string>
+    <string name="server_ip_default">asistenciafacial.ngrok.com</string>
+    <string name="title_activity_settings">Opciones</string>
+    <string name="usr_name_default">smoral</string>
 </resources>

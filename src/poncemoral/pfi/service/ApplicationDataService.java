@@ -36,7 +36,7 @@ public class ApplicationDataService {
 	public void initialize(SharedPreferences preferences, Activity activity) {
 		// Cargo las preferencias de la aplicacion
 		this.setPreferences(preferences);
-		remoteService = RemoteService.GetInstance(activity); 
+		remoteService = RemoteService.GetInstance(); 
 	}
 
 	private void setCourseActual(String courseJSON) {
@@ -62,7 +62,7 @@ public class ApplicationDataService {
 	}
 	
 	public void logIn (String usr, Activity activity){
-		String courseJSON = remoteService.logIn(usr);
+		String courseJSON = remoteService.logIn(usr, activity);
 		this.setCourseActual(courseJSON);
 		if (courseActual != null){
 			Boolean hasToUpdateFacesData = Boolean.FALSE;
@@ -82,7 +82,7 @@ public class ApplicationDataService {
 			}
 			if (hasToUpdateFacesData){
 				Log.i(AppConstants.TAG, "hasToUpdateFacesData");
-				String newFacesDataJSON = remoteService.getTrainingData(courseNumber);
+				String newFacesDataJSON = remoteService.getTrainingData(courseNumber, activity);
 				if (newFacesDataJSON != null){
 					this.saveFacesDataJson(newFacesDataJSON, courseNumber);
 					this.setFacesDataActual(newFacesDataJSON);					
